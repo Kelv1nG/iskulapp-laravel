@@ -26,6 +26,23 @@ Setup Guide:
     npm run start
     ```
      copy keys to .env
+    ```
+    JWKS_PUBLIC_KEY
+    JWKS_PRIVATE_KEY
+    ```
+   
+    also copy the jwk keys verification to `config\powersync.yaml`
+   
+    ```
+    jwks:
+      keys:
+        - kty:
+          n:
+          e:
+          alg:
+          kid:
+    ```
+
    
 
 4. Run below command to start services for the first time
