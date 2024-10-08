@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "School ERP Database",
+      "Group": "Servers",
+      "Host": "pg-db",
+      "Port": 5432,
+      "MaintenanceDB": "school_erp",
+      "Username": "admin",
+      "Password": "admin",
+      "SSLMode": "prefer"
+    }
+  }
+}

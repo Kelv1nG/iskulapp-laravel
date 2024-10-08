@@ -11,3 +11,4 @@
 |
 */
 require base_path('routes/Api/auth.php');
+require base_path('routes/Api/powersync.php');

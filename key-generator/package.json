@@ -1,0 +1,17 @@
+{
+  "name": "key-generator",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Creates RSA key pairs for JWT signing in PowerSync self hosted demo",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "keywords": [],
+  "devDependencies": {
+    "@types/node": "^20.12.7"
+  },
+  "dependencies": {
+    "jose": "^5.2.4"
+  }
+}

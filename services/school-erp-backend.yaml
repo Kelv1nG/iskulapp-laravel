@@ -1,0 +1,20 @@
+services:
+  school-erp-backend:
+    container_name: school-erp-backend
+    build: ../
+    volumes:
+      - ../src:/var/www/html
+    environment:
+      DB_HOST: pg-db
+      DB_PORT: ${PG_DATABASE_PORT} 
+      DB_DATABASE: ${PG_DATABASE_NAME}
+      DB_USERNAME: ${PG_DATABASE_USER}
+      DB_PASSWORD: ${PG_DATABASE_PASSWORD}
+
+      POWERSYNC_URL: "powersync-dev"
+      POWERSYNC_PUBLIC_KEY: ${JWKS_PUBLIC_KEY}
+      POWERSYNC_PRIVATE_KEY: ${JWKS_PRIVATE_KEY}
+    ports:
+      - ${SCHOOL_ERP_BACKEND_PORT}:${SCHOOL_ERP_BACKEND_PORT}
+    depends_on:
+      - pg-db
