@@ -1,7 +1,9 @@
 services:
   school-erp-backend:
     container_name: school-erp-backend
-    build: ../
+    build:
+      context:
+        ../docker/php/
     volumes:
       - ../src:/var/www/html
     environment:
@@ -14,7 +16,5 @@ services:
       POWERSYNC_URL: "powersync-dev"
       POWERSYNC_PUBLIC_KEY: ${JWKS_PUBLIC_KEY}
       POWERSYNC_PRIVATE_KEY: ${JWKS_PRIVATE_KEY}
-    ports:
-      - ${SCHOOL_ERP_BACKEND_PORT}:${SCHOOL_ERP_BACKEND_PORT}
     depends_on:
       - pg-db
