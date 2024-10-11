@@ -2,6 +2,7 @@ include:
   - path: services/postgres.yaml
   - path: services/mongo.yaml
   - path: services/school-erp-backend.yaml
+  - path: services/webserver.yaml
 
 services:
   # Extend PowerSync with Mongo and Postgres healthchecks
