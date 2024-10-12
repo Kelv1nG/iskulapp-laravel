@@ -3,11 +3,11 @@
 namespace Database\Seeders;
 
 use App\Enums\AssessmentStatus;
+use App\Enums\AssessmentType;
 use App\Models\Assessment;
 use App\Models\AssessmentQuestion;
 use App\Models\AssessmentQuestionAnswer;
 use App\Models\AssessmentTaker;
-use App\Models\AssessmentType;
 use App\Models\SubjectYear;
 use App\Models\User;
 use App\Models\UserProfile;
@@ -37,16 +37,16 @@ class TeacherSeeder extends Seeder
             'last_name' => self::TEACHER_LAST_NAME,
         ]);
 
-        $this->generateAssessments($user->id, AssessmentType::where('name', 'assignment')->value('id'));
+        $this->generateAssessments($user->id, AssessmentType::ASSIGNMENT->value);
         $this->assignAssessmentTakers();
     }
 
-    private function generateAssessments(int $userId, $assessmentTypeId): void
+    private function generateAssessments(int $userId, string $assessmentType): void
     {
         // create 2 assessment type per assessment status
         foreach (AssessmentStatus::cases() as $status) {
             Assessment::factory()->count(2)->create([
-                'type_id' => $assessmentTypeId,
+                'assessment_type' => $assessmentType,
                 'prepared_by' => $userId,
                 'status' => $status->value,
             ]);
