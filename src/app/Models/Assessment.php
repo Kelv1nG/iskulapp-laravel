@@ -12,7 +12,7 @@ class Assessment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'type_id',
+        'assessment_type',
         'prepared_by',
         'approved_by',
         'title',
@@ -27,11 +27,6 @@ class Assessment extends Model
     public function questions(): HasMany
     {
         return $this->hasMany(AssessmentQuestion::class, 'assessment_id', 'id');
-    }
-
-    public function assessmentType(): BelongsTo
-    {
-        return $this->belongsTo(AssessmentType::class, 'type_id', 'id');
     }
 
     /*
