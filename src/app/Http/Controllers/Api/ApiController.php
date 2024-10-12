@@ -17,7 +17,7 @@ class ApiController extends Controller
         return response()->json([
             'message' => $message,
             'data' => $data,
-        ])->setStatusCode($statusCode);
+        ], $statusCode);
     }
 
     public function listResponse($data, string $collectionClass, int $itemsPerPage = 100)
@@ -36,6 +36,6 @@ class ApiController extends Controller
         return response()->json([
             'message' => $message,
             'details' => $details,
-        ])->setStatusCode($statusCode);
+        ], $statusCode);
     }
 }
