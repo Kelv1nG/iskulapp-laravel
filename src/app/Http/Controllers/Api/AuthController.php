@@ -5,20 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Constants\ApiMessages\AuthMessage as API_MSG;
 use App\Constants\HttpStatus as STATUS;
 use App\Http\Requests\API\Auth\LoginRequest;
-use App\Http\Resources\User\UserResource;
 use App\Http\Resources\User\UserWithProfileResource;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends ApiController
 {
-    public function __construct() {}
-
-    public function user(?User $user = null): UserResource
-    {
-        return new UserResource($user ?? auth()->user());
-    }
-
     public function login(LoginRequest $request)
     {
         $data = $request->validated();
