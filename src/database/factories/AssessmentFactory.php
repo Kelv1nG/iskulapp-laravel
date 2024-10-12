@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\AssessmentStatus;
-use App\Models\AssessmentType;
+use App\Enums\AssessmentType;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -23,7 +23,7 @@ class AssessmentFactory extends Factory
         $deadLine = $this->faker->dateTimeBetween($startTime, '+2 months');
 
         return [
-            'type_id' => AssessmentType::factory(),
+            'assessment_type' => $this->faker->randomElement(array_column(AssessmentType::cases(), 'value')),
             'prepared_by' => User::factory(),
             'title' => $this->faker->unique()->sentence(3),
             'total_questions' => $this->faker->numberBetween(5, 20),
