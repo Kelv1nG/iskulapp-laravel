@@ -1,7 +1,7 @@
 <?php
 
 use App\Enums\AssessmentStatus;
-use App\Models\AssessmentType;
+use App\Enums\AssessmentType;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,10 +16,10 @@ return new class extends Migration
     {
         Schema::create('assessments', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(AssessmentType::class, 'type_id');
             $table->foreignIdFor(User::class, 'prepared_by');
             $table->foreignIdFor(User::class, 'approved_by')->nullable();
 
+            $table->enum('assessment_type', array_column(AssessmentType::cases(), 'value'));
             $table->string('title');
             $table->tinyInteger('total_questions');
             $table->boolean('is_approved')->default(false);
