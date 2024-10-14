@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Constants\ApiMessages\AuthMessage as API_MSG;
 use App\Constants\HttpStatus as STATUS;
-use App\Http\Requests\API\Auth\LoginRequest;
+use App\Http\Requests\Api\Auth\LoginRequest;
 use App\Http\Resources\User\UserWithProfileResource;
 use Illuminate\Support\Facades\Auth;
 
