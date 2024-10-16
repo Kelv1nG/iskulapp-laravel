@@ -1,5 +1,11 @@
 FROM php:8.1-fpm
 
+# Create a non-root user
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+RUN groupadd -g ${GROUP_ID} appuser && \
+    useradd -u ${USER_ID} -g appuser -s /bin/sh -m appuser
+
 WORKDIR /var/www/html
 
 # Install system dependencies
@@ -29,3 +35,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # important for returned http status to be reflected correctly
 COPY php.ini /usr/local/etc/php 
+
+# Change ownership of the working directory
+RUN chown -R appuser:appuser /var/www/html
+# Switch to non-root user
+USER appuser
