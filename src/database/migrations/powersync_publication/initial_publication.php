@@ -15,10 +15,22 @@ return new class extends Migration
         DB::unprepared("
             DO $$
             BEGIN
-                IF NOT EXISTS (
+                IF EXISTS (
                     SELECT 1 FROM pg_publication WHERE pubname = 'powersync'
-            ) THEN
-                    CREATE PUBLICATION powersync FOR ALL TABLES;
+                ) THEN
+                    ALTER PUBLICATION powersync SET TABLE
+                        assessments,
+                        assessment_takers,
+                        academic_years,
+                        subjects,
+                        subject_years;
+                ELSE
+                    CREATE PUBLICATION powersync FOR TABLE
+                        assessments,
+                        assessment_takers,
+                        academic_years,
+                        subjects,
+                        subject_years;
                 END IF;
             END $$;
         ");

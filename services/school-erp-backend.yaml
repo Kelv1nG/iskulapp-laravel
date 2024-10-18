@@ -2,8 +2,10 @@ services:
   school-erp-backend:
     container_name: school-erp-backend
     build:
-      context:
-        ../docker/php/
+      context: ../docker/php/
+      args:
+        USER_ID: 1000
+        GROUP_ID: 1000
     volumes:
       - ../src:/var/www/html
     environment:
@@ -12,9 +14,9 @@ services:
       DB_DATABASE: ${PG_DATABASE_NAME}
       DB_USERNAME: ${PG_DATABASE_USER}
       DB_PASSWORD: ${PG_DATABASE_PASSWORD}
-
       POWERSYNC_URL: "powersync-dev"
       POWERSYNC_PUBLIC_KEY: ${JWKS_PUBLIC_KEY}
       POWERSYNC_PRIVATE_KEY: ${JWKS_PRIVATE_KEY}
     depends_on:
       - pg-db
+    user: "1000:1000"
