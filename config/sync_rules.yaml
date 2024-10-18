@@ -3,4 +3,15 @@
 # Note that changes to this file are not watched.
 # The service needs to be restarted for changes to take effect.
 bucket_definitions:
+  global:
+    data:
+      - SELECT * FROM subjects
+      - SELECT * FROM subject_years
+      - SELECT * FROM academic_years
+      - SELECT * FROM assessment_takers
 
+  owned_assessments:
+    parameters: 
+      - SELECT request.user_id() as user_id
+    data:
+      - SELECT * FROM assessments WHERE prepared_by = bucket.user_id
