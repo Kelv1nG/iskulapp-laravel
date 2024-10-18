@@ -16,13 +16,13 @@ use Illuminate\Support\Facades\Hash;
 
 class TeacherSeeder extends Seeder
 {
-    const TEACHER_EXAMPLE_MAIL = 'madamsir@example.com';
+    const TEACHER_EXAMPLE_MAIL = 'mslaravel@example.com';
 
-    const TEACHER_EXAMPLE_PASSWORD = 'madamsir';
+    const TEACHER_EXAMPLE_PASSWORD = 'mslaravel';
 
-    const TEACHER_FIRST_NAME = 'Madam';
+    const TEACHER_FIRST_NAME = 'Lara';
 
-    const TEACHER_LAST_NAME = 'Sir';
+    const TEACHER_LAST_NAME = 'Vel';
 
     public function run(): void
     {
