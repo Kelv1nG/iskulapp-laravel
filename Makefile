@@ -2,8 +2,8 @@ setup:
 	@make build
 	@make up 
 	@make composer-install
-	@make migrate-seed 
 	@make generate-keys
+	@make migrate-seed 
 
 build:
 	docker-compose build --no-cache --force-rm
