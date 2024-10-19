@@ -5,7 +5,7 @@ Setup Guide:
     Create a copy of the .env file from .env.template:
    
     ```shell
-   cp .env.template .env
+   cp .env_template .env
     ```
     
 2. Laravel Env setup,
@@ -26,6 +26,22 @@ Setup Guide:
     npm run start
     ```
      copy keys to .env
+    ```
+    JWKS_PUBLIC_KEY
+    JWKS_PRIVATE_KEY
+    ```
+   
+    also copy the jwk keys verification to `config\powersync.yaml`
+   
+    ```
+    jwks:
+      keys:
+        - kty:
+          n:
+          e:
+          alg:
+          kid:
+    ```
    
 
 4. Run below command to start services for the first time
