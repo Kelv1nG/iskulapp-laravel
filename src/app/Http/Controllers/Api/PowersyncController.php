@@ -14,7 +14,8 @@ final class PowersyncController extends Controller
     public function getPowerSyncToken(): JsonResponse
     {
         try {
-            $token = PowerSyncUtils::createJwtToken(Auth::user()->id);
+            $userId = Auth::user()->id;
+            $token = PowerSyncUtils::createJwtToken($userId);
 
             return response()->json([
                 'token' => $token,
