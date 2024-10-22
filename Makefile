@@ -32,6 +32,6 @@ generate-keys:
 	docker exec -u root school-erp-backend bash -c "php artisan passport:keys --force"
 
 artisan:
-	@docker exec -u root school-erp-backend bash -c "php artisan $(ARGS)"
+	@docker exec school-erp-backend bash -c "php artisan $(ARGS)"
 
 .PHONY: artisan
