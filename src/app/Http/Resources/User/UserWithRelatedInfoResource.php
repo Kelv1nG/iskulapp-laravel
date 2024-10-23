@@ -5,7 +5,7 @@ namespace App\Http\Resources\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserWithProfileResource extends JsonResource
+class UserWithRelatedInfoResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -22,6 +22,7 @@ class UserWithProfileResource extends JsonResource
             'email_verified_at' => $this->email_verified_at,
             'birth_date' => optional($this->userProfile)->birth_date,
             'gender' => optional($this->userProfile)->gender,
+            'role' => $this->getRoleNames()->first(),
         ];
     }
 }
