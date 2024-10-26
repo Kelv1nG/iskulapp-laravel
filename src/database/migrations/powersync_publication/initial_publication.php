@@ -12,28 +12,21 @@ return new class extends Migration
      */
     public function up()
     {
-        DB::unprepared("
+        DB::unprepared('
             DO $$
             BEGIN
-                IF EXISTS (
-                    SELECT 1 FROM pg_publication WHERE pubname = 'powersync'
-                ) THEN
-                    ALTER PUBLICATION powersync SET TABLE
-                        assessments,
-                        assessment_takers,
-                        academic_years,
-                        subjects,
-                        subject_years;
-                ELSE
-                    CREATE PUBLICATION powersync FOR TABLE
-                        assessments,
-                        assessment_takers,
-                        academic_years,
-                        subjects,
-                        subject_years;
-                END IF;
+                DROP PUBLICATION IF EXISTS powersync;
+                CREATE PUBLICATION powersync FOR TABLE
+                    assessments,
+                    assessment_takers,
+                    academic_years,
+                    subjects,
+                    subject_years,
+                    teachers,
+                    teacher_year,
+                    teacher_subjects;
             END $$;
-        ");
+        ');
     }
 
     /**
