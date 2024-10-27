@@ -24,7 +24,9 @@ return new class extends Migration
                     subject_years,
                     teachers,
                     teacher_year,
-                    teacher_subjects;
+                    teacher_subjects,
+                    teacher_sections,
+                    sections;
             END $$;
         ');
     }
