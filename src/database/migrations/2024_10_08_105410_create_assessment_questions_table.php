@@ -14,7 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('assessment_questions', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->foreignIdFor(Assessment::class, 'assessment_id');
 
             $table->text('question');

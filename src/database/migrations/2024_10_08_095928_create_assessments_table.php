@@ -15,7 +15,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('assessments', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->foreignIdFor(User::class, 'prepared_by');
             $table->foreignIdFor(User::class, 'approved_by')->nullable();
 

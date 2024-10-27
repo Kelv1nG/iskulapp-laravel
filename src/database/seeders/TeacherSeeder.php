@@ -4,14 +4,19 @@ namespace Database\Seeders;
 
 use App\Enums\AssessmentStatus;
 use App\Enums\AssessmentType;
+use App\Models\AcademicYear;
 use App\Models\Assessment;
 use App\Models\AssessmentQuestion;
 use App\Models\AssessmentQuestionAnswer;
 use App\Models\AssessmentTaker;
+use App\Models\Section;
 use App\Models\SubjectYear;
+use App\Models\Teacher;
+use App\Models\TeacherSection;
 use App\Models\User;
 use App\Models\UserProfile;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class TeacherSeeder extends Seeder
@@ -37,8 +42,67 @@ class TeacherSeeder extends Seeder
             'last_name' => self::TEACHER_LAST_NAME,
         ]);
 
+        $teacher = Teacher::factory()->create([
+            'user_id' => $user->id,
+        ]);
+
+        $this->generateTeacherYears($teacher->id);
+        $this->generateTeacherSubjects($teacher->id);
+        $this->generateTeacherSections($teacher);
         $this->generateAssessments($user->id, AssessmentType::ASSIGNMENT->value);
         $this->assignAssessmentTakers();
+    }
+
+    private function generateTeacherSubjects($teacherId): void
+    {
+        $latestAcademicYear = AcademicYear::orderBy('end', 'desc')->first();
+
+        $latestSubjectYearIds = SubjectYear::where('academic_year_id', $latestAcademicYear->id)
+            ->pluck('id')
+            ->toArray();
+
+        $records = collect($latestSubjectYearIds)->map(function ($subjectYearId) use ($teacherId) {
+            return [
+                'teacher_id' => $teacherId,
+                'subject_year_id' => $subjectYearId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        })->toArray();
+
+        // Bulk insert using insertOrIgnore to prevent duplicates
+        DB::table('teacher_subjects')->insertOrIgnore($records);
+    }
+
+    private function generateTeacherSections($teacher): void
+    {
+        $latestAcademicYear = AcademicYear::orderBy('end', 'desc')->first();
+
+        $currentSectionIds = Section::where('academic_year_id', $latestAcademicYear->id)
+            ->inRandomOrder()
+            ->take(3)
+            ->pluck('id');
+
+        $notCurrentSectionIds = Section::where('academic_year_id', '!=', $latestAcademicYear->id)
+            ->inRandomOrder()
+            ->take(2)
+            ->pluck('id');
+
+        collect($currentSectionIds)
+            ->concat($notCurrentSectionIds)
+            ->each(fn ($sectionId) => TeacherSection::factory()->create([
+                'teacher_id' => $teacher->id,
+                'section_id' => $sectionId,
+            ])
+            );
+    }
+
+    private function generateTeacherYears($teacherId): void
+    {
+        $teacher = Teacher::find($teacherId);
+        $academicYearIds = AcademicYear::pluck('id');
+
+        $teacher->academicYears()->syncWithoutDetaching($academicYearIds);
     }
 
     private function generateAssessments(int $userId, string $assessmentType): void

@@ -18,7 +18,7 @@ class SubjectYearSeeder extends Seeder
         $academicYearIds = AcademicYear::pluck('id');
 
         // create unique combinations of subject_id and academic_year_id
-        $combinations = $subjectIds->crossJoin($academicYearIds)->shuffle()->take(5);
+        $combinations = $subjectIds->crossJoin($academicYearIds)->shuffle();
 
         foreach ($combinations as $combination) {
             SubjectYear::factory()->create([
