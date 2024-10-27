@@ -6,9 +6,19 @@ bucket_definitions:
   global:
     data:
       - SELECT * FROM subjects
-      - SELECT * FROM subject_years
-      - SELECT * FROM academic_years
-      - SELECT * FROM assessment_takers
+      - SELECT * FROM academic_years 
+      - SELECT * FROM subject_years # temporary
+      - SELECT * FROM assessment_takers # temporary
+      - SELECT * FROM sections
+
+  teacher_info:
+    parameters:
+      - SELECT id as teacher_id FROM teachers WHERE user_id = request.user_id()
+    data:
+      - SELECT * FROM teachers WHERE id = bucket.teacher_id
+      - SELECT * FROM teacher_year WHERE teacher_id = bucket.teacher_id
+      - SELECT * FROM teacher_subjects WHERE teacher_id = bucket.teacher_id
+      - SELECT * FROM teacher_sections WHERE teacher_id = bucket.teacher_id
 
   owned_assessments:
     parameters: 
