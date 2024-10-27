@@ -21,7 +21,7 @@ class AcademicYearFactory extends Factory
 
         return [
             'name' => $startDate->year,
-            'begin' => $startDate->toDateString(),
+            'start' => $startDate->toDateString(),
             'end' => $startDate->copy()->addMonths(9)->toDateString(),
         ];
     }
