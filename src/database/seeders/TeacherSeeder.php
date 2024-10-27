@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Enums\AssessmentStatus;
 use App\Enums\AssessmentType;
+use App\Enums\RoleEnum;
 use App\Models\AcademicYear;
 use App\Models\Assessment;
 use App\Models\AssessmentQuestion;
@@ -18,6 +19,7 @@ use App\Models\UserProfile;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class TeacherSeeder extends Seeder
 {
@@ -35,6 +37,9 @@ class TeacherSeeder extends Seeder
             'email' => self::TEACHER_EXAMPLE_MAIL,
             'password' => Hash::make(self::TEACHER_EXAMPLE_PASSWORD),
         ]);
+
+        $role = Role::where('name', RoleEnum::TEACHER)->first();
+        $user->assignRole($role);
 
         UserProfile::factory()->create([
             'user_id' => $user->id,
