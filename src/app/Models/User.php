@@ -53,6 +53,16 @@ class User extends Authenticatable implements HasName, FilamentUser
         return $this->hasOne(UserProfile::class, 'user_id', 'id');
     }
 
+    public function teacher(): HasOne
+    {
+        return $this->hasOne(Teacher::class);
+    }
+
+    public function student(): HasOne
+    {
+        return $this->hasOne(Student::class);
+    }
+  
     public function getFilamentName(): string
     {
         return 'Admin';
@@ -61,5 +71,6 @@ class User extends Authenticatable implements HasName, FilamentUser
     public function canAccessPanel(Panel $panel): bool
     {
         return $this->hasRole(RoleEnum::ADMIN);
+
     }
 }
