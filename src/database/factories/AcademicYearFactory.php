@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\School;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -20,6 +21,7 @@ class AcademicYearFactory extends Factory
         $startDate = Carbon::create($this->faker->year, $this->faker->month, 1);
 
         return [
+           'school_id' => School::factory(),
             'name' => $startDate->year,
             'start' => $startDate->toDateString(),
             'end' => $startDate->copy()->addMonths(9)->toDateString(),
