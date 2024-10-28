@@ -2,9 +2,9 @@
 
 namespace App\DataHandlers;
 
+use App\DataHandlers\Exceptions\NoTableException;
 use App\Models\Assessment;
 use App\Models\AssessmentTaker;
-use Exception;
 
 class DataHandler
 {
@@ -23,7 +23,7 @@ class DataHandler
         ];
 
         if (! isset($handlers[$table])) {
-            throw new Exception("No handler found for table: $table");
+            throw new NoTableException($table);
         }
 
         return $handlers[$table];
