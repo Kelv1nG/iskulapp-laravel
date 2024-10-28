@@ -3,6 +3,7 @@
 namespace App\DataHandlers;
 
 use App\Models\Assessment;
+use App\Models\AssessmentTaker;
 use Exception;
 
 class DataHandler
@@ -17,7 +18,8 @@ class DataHandler
     public static function getHandler($table)
     {
         $handlers = [
-            Assessment::getTableMap() => AssessmentHandler::class,
+            Assessment::getTableName() => AssessmentHandler::class,
+            AssessmentTaker::getTableName() => AssessmentTakerHandler::class,
         ];
 
         if (! isset($handlers[$table])) {
