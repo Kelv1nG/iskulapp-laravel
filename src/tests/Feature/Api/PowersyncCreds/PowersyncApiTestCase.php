@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api\Powersync;
+namespace Tests\Feature\Api\PowersyncCreds;
 
 use Illuminate\Testing\TestResponse;
 use Tests\Feature\ApiBaseTest;
