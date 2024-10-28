@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Constants\HttpStatus;
 use App\DataHandlers\DataHandler;
+use App\DataHandlers\Exceptions\NoTableException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class PowersyncDataController extends ApiController
 {
@@ -19,9 +19,13 @@ class PowersyncDataController extends ApiController
             DataHandler::handle($table, $method, $data);
 
             return $this->response(HttpStatus::HTTP_OK);
+        } catch (NoTableException $e) {
+            return $this->errorResponse(
+                HttpStatus::HTTP_BAD_REQUEST,
+                'Failed to upload data',
+                $e->getMessage()
+            );
         } catch (\Exception $e) {
-            Log::error('PowerSync data upload failed: '.$e->getMessage());
-
             return $this->errorResponse(
                 HttpStatus::HTTP_INTERNAL_SERVER_ERROR,
                 'Failed to upload data',
