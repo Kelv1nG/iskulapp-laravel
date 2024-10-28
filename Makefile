@@ -34,4 +34,7 @@ generate-keys:
 artisan:
 	@docker exec school-erp-backend bash -c "php artisan $(ARGS)"
 
+bash:
+	@docker exec -uroot -it school-erp-backend bash
+
 .PHONY: artisan
