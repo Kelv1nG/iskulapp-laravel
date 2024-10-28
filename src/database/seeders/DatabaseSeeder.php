@@ -14,16 +14,20 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RoleSeeder::class,
-            AcademicYearSeeder::class,
-            SubjectSeeder::class,
-            SubjectYearSeeder::class,
-            SectionSeeder::class,
-
-            TeacherSeeder::class,
-            StudentSeeder::class,
-
-            OauthClientSeeder::class,
         ]);
+        if(app()->environment() !== 'production') {
+            $this->call([
+                AdminSeeder::class,
+                AcademicYearSeeder::class,
+                SubjectSeeder::class,
+                SubjectYearSeeder::class,
+                SectionSeeder::class,
 
+                TeacherSeeder::class,
+                StudentSeeder::class,
+
+                OauthClientSeeder::class,
+            ]);
+        }
     }
 }
