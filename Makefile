@@ -17,6 +17,9 @@ up:
 composer-install:
 	docker exec -u root school-erp-backend bash -c "composer install"
 
+composer-update:
+	docker exec -u root school-erp-backend bash -c "composer update"
+
 migrate-seed:
 	docker exec -u root school-erp-backend bash -c "php artisan migrate"
 	docker exec -u root school-erp-backend bash -c "php artisan migrate --path=database/migrations/powersync_publication"
@@ -35,6 +38,6 @@ artisan:
 	@docker exec school-erp-backend bash -c "php artisan $(ARGS)"
 
 bash:
-	@docker exec -uroot -it school-erp-backend bash
+	@docker exec -u root -it school-erp-backend bash
 
 .PHONY: artisan
