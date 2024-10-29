@@ -7,6 +7,7 @@ use App\Constants\HttpStatus as STATUS;
 use App\Http\Requests\Api\Auth\LoginRequest;
 use App\Http\Resources\User\UserWithRelatedInfoResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends ApiController
 {
