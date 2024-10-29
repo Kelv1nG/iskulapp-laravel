@@ -54,7 +54,7 @@ class TeacherSeeder extends Seeder
         $this->generateTeacherYears($teacher->id);
         $this->generateTeacherSubjects($teacher->id);
         $this->generateTeacherSections($teacher);
-        $this->generateAssessments($user->id, AssessmentType::ASSIGNMENT->value);
+        $this->generateAssessments($teacher->id, AssessmentType::ASSIGNMENT->value);
         $this->assignAssessmentTakers();
     }
 

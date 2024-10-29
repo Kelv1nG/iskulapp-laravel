@@ -19,9 +19,4 @@ bucket_definitions:
       - SELECT * FROM teacher_year WHERE teacher_id = bucket.teacher_id
       - SELECT * FROM teacher_subjects WHERE teacher_id = bucket.teacher_id
       - SELECT * FROM teacher_sections WHERE teacher_id = bucket.teacher_id
-
-  owned_assessments:
-    parameters: 
-      - SELECT request.user_id() as user_id
-    data:
-      - SELECT * FROM assessments WHERE prepared_by = bucket.user_id
+      - SELECT * FROM assessments WHERE prepared_by = bucket.teacher_id
