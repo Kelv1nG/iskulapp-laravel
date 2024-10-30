@@ -3,7 +3,7 @@ setup:
 	@make up 
 	@make composer-install
 	@make generate-keys
-	@make migrate-seed 
+	@make refresh-db 
 
 build:
 	docker compose build --no-cache --force-rm
