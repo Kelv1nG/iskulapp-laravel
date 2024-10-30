@@ -88,13 +88,13 @@ client_auth:
   jwks_uri: !env PS_JWKS_URL
 
   # Optional static collection of public keys for JWT verification
-  # jwks:
-  #   keys:
-  #     - kty:
-  #       n:
-  #       e:
-  #       alg:
-  #       kid:
+  jwks:
+     keys:
+       - kty: "RSA"
+         n: "maQfMQb3GQ7NXCU_rfxrQPOjqDa4gzXKpgWgV8GU2HqVdTt0bB0kSWqRg2Zd5cnOM9MQCjB0TFZEOAr1ILZdAQC0EzQpgw6vs9ExiGYmcwgr3_fUIshiePssX-zNlcTn-FfVSmLzGbeHnaG5pnGCMnumpLl14HKVwftcfJutxtuwz7avy4vSI4uClpUEmLBzTowmGW8-Lv1wb10IXhafwq19H6yV01sBYaOxmF5wQoccoJZwQllsvaSgXq_8KYKWw6FvOxyO6r8o2hC2LtLXkDbD_WJHuwfXmFYcbRud3R8ppKyx9LifK3mvJookz3SeEUMGTLyCNvXzAlZRICw7qw"
+         e: "AQAB"
+         alg: "RS256"
+         kid: "powersync-78f6102f1a"
   #
   # JWKS audience
   audience: ["powersync-dev", "powersync"]
