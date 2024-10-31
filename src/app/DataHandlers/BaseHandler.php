@@ -4,21 +4,23 @@ namespace App\DataHandlers;
 
 abstract class BaseHandler
 {
-    abstract public static function upsert($data);
-
-    abstract public static function update($data);
-
-    abstract public static function delete($data);
-
-    public static function handle($method, $data)
+    public static function handle(string $method, array $data)
     {
         switch ($method) {
             case 'PUT':
-                self::upsert($data);
+                return static::upsert($data);
             case 'PATCH':
-                self::update($data);
+                return static::update($data);
             case 'DELETE':
-                self::delete($data);
+                return static::delete($data);
+            default:
+                throw new \Exception("Unsupported method: {$method}");
         }
     }
+
+    abstract public static function upsert(array $data);
+
+    abstract public static function update(array $data);
+
+    abstract public static function delete(array $data);
 }

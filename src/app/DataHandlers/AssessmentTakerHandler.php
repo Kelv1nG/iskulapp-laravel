@@ -2,13 +2,13 @@
 
 namespace App\DataHandlers;
 
-use App\Models\Assessment;
+use App\Models\AssessmentTaker;
 
-class AssessmentHandler extends BaseHandler
+class AssessmentTakerHandler extends BaseHandler
 {
     public static function upsert($data)
     {
-        Assessment::upsert([$data], uniqueBy: ['id'], update: array_keys($data));
+        AssessmentTaker::upsert([$data], uniqueBy: ['id'], update: array_keys($data));
     }
 
     public static function update($data) {}

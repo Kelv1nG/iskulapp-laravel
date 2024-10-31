@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\TableName;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,20 +11,31 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Assessment extends Model
 {
-    use HasFactory;
-    use HasUuids;
+    use HasFactory, HasUuids, TableName;
 
     protected $fillable = [
         'assessment_type',
         'prepared_by',
         'approved_by',
         'title',
-        'no_of_questions',
+        'total_questions',
         'is_approved',
         'start_time',
         'dead_line',
-        'duration_minutes',
+        'duration_mins',
         'status',
+        'created_at',
+        'updated_at',
+    ];
+
+    protected $casts = [
+        'start_time' => 'datetime',
+        'dead_line' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'is_approved' => 'boolean',
+        'total_questions' => 'integer',
+        'duration_mins' => 'integer',
     ];
 
     public function questions(): HasMany
@@ -36,7 +48,7 @@ class Assessment extends Model
     */
     public function preparedBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'prepared_by', 'id');
+        return $this->belongsTo(Teacher::class, 'prepared_by', 'id');
     }
 
     public function approvedBy(): BelongsTo
