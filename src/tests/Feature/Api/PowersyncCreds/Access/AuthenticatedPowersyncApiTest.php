@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Feature\Api\Powersync\Access;
+namespace Tests\Feature\Api\PowersyncCreds\Access;
 
 use App\Constants\HttpStatus as STATUS;
 use Database\Seeders\StudentSeeder;
-use Tests\Feature\Api\Powersync\PowersyncApiTestCase;
+use Tests\Feature\Api\PowersyncCreds\PowersyncApiTestCase;
 
 class AuthenticatedPowersyncApiTest extends PowersyncApiTestCase
 {

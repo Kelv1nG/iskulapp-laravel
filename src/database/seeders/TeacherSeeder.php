@@ -54,7 +54,7 @@ class TeacherSeeder extends Seeder
         $this->generateTeacherYears($teacher->id);
         $this->generateTeacherSubjects($teacher->id);
         $this->generateTeacherSections($teacher);
-        $this->generateAssessments($user->id, AssessmentType::ASSIGNMENT->value);
+        $this->generateAssessments($teacher->id, AssessmentType::ASSIGNMENT->value);
         $this->assignAssessmentTakers();
     }
 
@@ -182,10 +182,14 @@ class TeacherSeeder extends Seeder
     private function assignAssessmentTakers(): void
     {
         $assessments = Assessment::pluck('id');
+        $subjectYears = SubjectYear::all();
+        $sections = Section::all();
+
         foreach ($assessments as $assessmentId) {
             AssessmentTaker::factory()->create([
                 'assessment_id' => $assessmentId,
-                'subject_year_id' => SubjectYear::all()->random()->id,
+                'subject_year_id' => $subjectYears->random()->id,
+                'section_id' => $sections->random()->id,
             ]);
         }
     }
