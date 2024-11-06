@@ -15,7 +15,8 @@ class AcademicYearSeeder extends Seeder
     public function run(): void
     {
         $school = School::factory()->create([
-            'name' => 'Fake Academy'
+            'name' => 'Pambasang Mataas na Paraalan ng Albay',
+            'short_name' => 'PMNPNA',
         ]);
 
         $academicYears = [

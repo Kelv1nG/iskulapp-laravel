@@ -14,7 +14,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements HasName, FilamentUser
+class User extends Authenticatable implements FilamentUser, HasName
 {
     use HasApiTokens, HasFactory, HasRoles, Notifiable;
 
@@ -62,7 +62,33 @@ class User extends Authenticatable implements HasName, FilamentUser
     {
         return $this->hasOne(Student::class);
     }
-  
+
+    public function getLoginId(): ?string
+    {
+        $role = $this->getRoleNames()->first();
+
+        return match ($role) {
+            RoleEnum::TEACHER->value => $this->teacher?->id,
+            RoleEnum::STUDENT->value => $this->student?->id,
+            default => null
+        };
+    }
+
+    public function getCurrentAcademicYear(): ?AcademicYear
+    {
+        $role = $this->getRoleNames()->first();
+
+        return match ($role) {
+            RoleEnum::TEACHER->value => $this->teacher?->academicYears()
+                ->latest('created_at')
+                ->first(),
+            RoleEnum::STUDENT->value => $this->student?->academicYears()
+                ->latest('created_at')
+                ->first(),
+            default => null
+        };
+    }
+
     public function getFilamentName(): string
     {
         return 'Admin';

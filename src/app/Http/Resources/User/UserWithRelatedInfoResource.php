@@ -18,25 +18,12 @@ class UserWithRelatedInfoResource extends JsonResource
             'id' => $this->id,
             'login_type' => $this->getRoleNames()->first(),
             'login_id' => $this->getLoginId(),
+            'email' => $this->email,
             'first_name' => $this->userProfile->first_name,
             'last_name' => $this->userProfile->last_name,
-            'email' => $this->email,
-            'email_verified_at' => $this->email_verified_at,
-            'birth_date' => optional($this->userProfile)->birth_date,
-            'gender' => optional($this->userProfile)->gender,
             'role' => $this->getRoleNames()->first(),
+            'school_name' => $this->getCurrentAcademicYear()->school->short_name,
+            'academic_year' => $this->getCurrentAcademicYear()->name,
         ];
-    }
-
-    /**
-     * Get the login ID based on user type (teacher or student).
-     */
-    protected function getLoginId(): ?string
-    {
-        return match ($this->getRoleNames()->first()) {
-            'teacher' => $this->teacher?->id,
-            'student' => $this->student?->id,
-            default => null
-        };
     }
 }
