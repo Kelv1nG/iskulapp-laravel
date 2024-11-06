@@ -12,9 +12,8 @@ class AcademicYear extends Model
 
     protected $fillable = ['name', 'start', 'end'];
 
-    public function School(): BelongsTo
-{
-    return $this->belongsTo(School::class, 'school_id', 'id');
-}
-
+    public function school(): BelongsTo
+    {
+        return $this->belongsTo(School::class, 'school_id', 'id');
+    }
 }
