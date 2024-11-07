@@ -19,7 +19,7 @@ use App\Models\AcademicYear;
 class StudentResource extends Resource
 {
     protected static ?string $model = Student::class;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
 
     public static function form(Form $form): Form
     {
