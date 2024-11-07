@@ -18,9 +18,14 @@ class AssessmentTakerFactory extends Factory
      */
     public function definition(): array
     {
+        $startTime = $this->faker->dateTimeBetween('now', '+1 month');
+        $deadLine = $this->faker->dateTimeBetween($startTime, '+2 months');
+
         return [
             'assessment_id' => Assessment::factory(),
             'subject_year_id' => SubjectYear::factory(),
+            'start_time' => $startTime,
+            'dead_line' => $deadLine,
         ];
     }
 }

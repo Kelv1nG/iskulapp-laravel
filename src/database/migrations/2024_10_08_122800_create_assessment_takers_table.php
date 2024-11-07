@@ -19,6 +19,8 @@ return new class extends Migration
             $table->foreignIdFor(Assessment::class, 'assessment_id');
             $table->foreignIdFor(SubjectYear::class, 'subject_year_id');
             $table->foreignIdFor(Section::class, 'section_id');
+            $table->dateTime('start_time');
+            $table->dateTime('dead_line')->nullable();
             $table->timestamps();
         });
     }

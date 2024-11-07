@@ -19,17 +19,12 @@ class AssessmentFactory extends Factory
      */
     public function definition(): array
     {
-        $startTime = $this->faker->dateTimeBetween('now', '+1 month');
-        $deadLine = $this->faker->dateTimeBetween($startTime, '+2 months');
-
         return [
             'assessment_type' => $this->faker->randomElement(array_column(AssessmentType::cases(), 'value')),
             'prepared_by' => User::factory(),
             'title' => $this->faker->unique()->sentence(3),
             'total_questions' => $this->faker->numberBetween(5, 20),
             'is_approved' => $this->faker->boolean(50),
-            'start_time' => $startTime,
-            'dead_line' => $deadLine,
             'duration_mins' => $this->faker->numberBetween(30, 180),
             'status' => $this->faker->randomElement(array_column(AssessmentStatus::cases(), 'value')),
         ];

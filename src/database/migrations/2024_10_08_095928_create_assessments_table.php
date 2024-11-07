@@ -24,9 +24,8 @@ return new class extends Migration
             $table->string('title');
             $table->tinyInteger('total_questions');
             $table->boolean('is_approved')->default(false);
-            $table->dateTime('start_time');
-            $table->dateTime('dead_line')->nullable();
             $table->tinyInteger('duration_mins')->nullable();
+            $table->boolean('randomize_sequence')->default(false);
             $table->enum('status', array_column(AssessmentStatus::cases(), 'value'));
 
             $table->timestamps();
