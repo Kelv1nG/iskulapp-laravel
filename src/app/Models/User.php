@@ -14,7 +14,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements HasName, FilamentUser
+class User extends Authenticatable implements FilamentUser, HasName
 {
     use HasApiTokens, HasFactory, HasRoles, Notifiable;
 
@@ -62,7 +62,7 @@ class User extends Authenticatable implements HasName, FilamentUser
     {
         return $this->hasOne(Student::class);
     }
-  
+
     public function getFilamentName(): string
     {
         return 'Admin';
@@ -71,6 +71,5 @@ class User extends Authenticatable implements HasName, FilamentUser
     public function canAccessPanel(Panel $panel): bool
     {
         return $this->hasRole(RoleEnum::ADMIN);
-
     }
 }

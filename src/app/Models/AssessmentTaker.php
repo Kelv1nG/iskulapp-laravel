@@ -14,20 +14,21 @@ class AssessmentTaker extends Model
 
     protected $fillable = [
         'assessment_id',
-        'subject_year_id',
         'section_id',
+        'start_time',
+        'dead_line',
         'created_at',
         'updated_at',
+    ];
+
+    protected $casts = [
+        'start_time' => 'datetime',
+        'dead_line' => 'datetime',
     ];
 
     public function assessment(): BelongsTo
     {
         return $this->belongsTo(Assessment::class, 'assessment_id', 'id');
-    }
-
-    public function subjectYear(): BelongsTo
-    {
-        return $this->belongsTo(SubjectYear::class, 'subject_year_id', 'id');
     }
 
     public function section(): BelongsTo
