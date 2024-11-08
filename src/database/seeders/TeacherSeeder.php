@@ -112,10 +112,12 @@ class TeacherSeeder extends Seeder
 
     private function generateAssessments(int $userId, string $assessmentType): void
     {
+        $subjectYears = SubjectYear::all();
         // create 2 assessment type per assessment status
         foreach (AssessmentStatus::cases() as $status) {
             Assessment::factory()->count(2)->create([
                 'assessment_type' => $assessmentType,
+                'subject_year_id' => $subjectYears->random()->id,
                 'prepared_by' => $userId,
                 'status' => $status->value,
             ]);
@@ -182,13 +184,12 @@ class TeacherSeeder extends Seeder
     private function assignAssessmentTakers(): void
     {
         $assessments = Assessment::pluck('id');
-        $subjectYears = SubjectYear::all();
         $sections = Section::all();
 
+        /// assign 5 takers for each assesment
         foreach ($assessments as $assessmentId) {
-            AssessmentTaker::factory()->create([
+            AssessmentTaker::factory(5)->create([
                 'assessment_id' => $assessmentId,
-                'subject_year_id' => $subjectYears->random()->id,
                 'section_id' => $sections->random()->id,
             ]);
         }
