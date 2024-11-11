@@ -1,6 +1,7 @@
 <?php
 
-use App\Models\User;
+use App\Models\AcademicYear;
+use App\Models\Student;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,10 +13,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('students', function (Blueprint $table) {
-            $table->id();
-            $table->foreignIdFor(User::class, 'user_id');
-            $table->string('student_no');
+        Schema::create('student_year', function (Blueprint $table) {
+            $table->foreignIdFor(Student::class, 'student_id');
+            $table->foreignIdFor(AcademicYear::class, 'academic_year_id');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('students');
+        Schema::dropIfExists('student_year');
     }
 };
