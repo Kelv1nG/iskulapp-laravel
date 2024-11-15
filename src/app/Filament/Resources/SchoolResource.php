@@ -12,18 +12,27 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Forms\Components\FileUpload;
 
 class SchoolResource extends Resource
 {
     protected static ?string $model = School::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-building-library';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('name') ,
+                Forms\Components\TextInput::make('address'),
+                Forms\Components\TextInput::make('phone'),
+                Forms\Components\TextInput::make('mobile'),
+                Forms\Components\TextInput::make('email'),
+                Forms\Components\TextInput::make('website'),
+                Forms\Components\FileUpload::make('logo'),
             ]);
     }
 
@@ -31,7 +40,14 @@ class SchoolResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('name'),
+                TextColumn::make('address'),
+                TextColumn::make('phone'),
+                TextColumn::make('mobile'),
+                TextColumn::make('email'),
+                TextColumn::make('website'),
+                ImageColumn::make('logo'),
+                TextColumn::make('status'),
             ])
             ->filters([
                 //

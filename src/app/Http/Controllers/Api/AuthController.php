@@ -21,17 +21,15 @@ class AuthController extends ApiController
             $user = Auth::user();
             optional($user->userProfile);
             $tokenResult = $user->createToken('UserToken');
-            $accessToken = $tokenResult->accessToken;
-            $expiry = $tokenResult->token->expires_at;
 
             return $this->response(
                 statusCode: STATUS::HTTP_OK,
                 message: API_MSG::AUTHENTICATION_SUCCESS,
-                data: [
-                    'user' => new UserWithRelatedInfoResource($user),
-                    'access_token' => $accessToken,
-                    'token_expiry' => $expiry,
-                ]
+                data: array_merge(
+                    (new UserWithRelatedInfoResource($user))->resolve(),
+                    ['access_token' => $tokenResult->accessToken,
+                        'token_expiry' => $tokenResult->token->expires_at, ]
+                )
             );
         } else {
             return $this->errorResponse(

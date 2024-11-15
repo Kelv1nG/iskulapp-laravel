@@ -3,16 +3,16 @@ setup:
 	@make up 
 	@make composer-install
 	@make generate-keys
-	@make migrate-seed 
+	@make refresh-db 
 
 build:
-	docker-compose build --no-cache --force-rm
+	docker compose build --no-cache --force-rm
 
 stop:
-	docker-compose stop
+	docker compose stop
 
 up:
-	docker-compose up -d
+	docker compose up -d
 
 composer-install:
 	docker exec -u root school-erp-backend bash -c "composer install"
