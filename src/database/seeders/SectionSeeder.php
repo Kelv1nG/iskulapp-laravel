@@ -15,8 +15,7 @@ class SectionSeeder extends Seeder
         // Array of section names to use
         $sectionNames = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
-        // Create 3 sections for the latest academic year
-        foreach (array_slice($sectionNames, 0, 3) as $name) {
+        foreach ($sectionNames as $name) {
             Section::create([
                 'academic_year_id' => $latestAcademicYear->id,
                 'advisor_id' => null,

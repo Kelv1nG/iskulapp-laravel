@@ -84,8 +84,6 @@ class TeacherSeeder extends Seeder
         $latestAcademicYear = AcademicYear::orderBy('end', 'desc')->first();
 
         $currentSectionIds = Section::where('academic_year_id', $latestAcademicYear->id)
-            ->inRandomOrder()
-            ->take(3)
             ->pluck('id');
 
         $notCurrentSectionIds = Section::where('academic_year_id', '!=', $latestAcademicYear->id)
@@ -95,11 +93,9 @@ class TeacherSeeder extends Seeder
 
         collect($currentSectionIds)
             ->concat($notCurrentSectionIds)
-            ->each(fn ($sectionId) => TeacherSection::factory()->create([
-                'teacher_id' => $teacher->id,
-                'section_id' => $sectionId,
-            ])
-            );
+            ->each(fn ($sectionId) => TeacherSection::factory()
+                ->create(['teacher_id' => $teacher->id,
+                    'section_id' => $sectionId, ]));
     }
 
     private function generateTeacherYears($teacherId): void
@@ -184,14 +180,18 @@ class TeacherSeeder extends Seeder
     private function assignAssessmentTakers(): void
     {
         $assessments = Assessment::pluck('id');
-        $sections = Section::all();
+        $latestAcademicYear = AcademicYear::orderBy('end', 'desc')->first();
+        $sections = Section::where('academic_year_id', $latestAcademicYear->id)->get();
 
-        /// assign 5 takers for each assesment
         foreach ($assessments as $assessmentId) {
-            AssessmentTaker::factory(5)->create([
-                'assessment_id' => $assessmentId,
-                'section_id' => $sections->random()->id,
-            ]);
+            $randomSections = $sections->random(min(5, $sections->count()))->pluck('id');
+
+            foreach ($randomSections as $sectionId) {
+                AssessmentTaker::factory()->create([
+                    'assessment_id' => $assessmentId,
+                    'section_id' => $sectionId,
+                ]);
+            }
         }
     }
 }
