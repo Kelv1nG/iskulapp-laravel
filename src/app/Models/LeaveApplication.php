@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\LeaveType;
+use App\Enums\LeaveStatus;
 
 class LeaveApplication extends Model
 {
@@ -21,4 +23,9 @@ class LeaveApplication extends Model
     ];
 
     protected $dates = ['start_date', 'end_date'];
+
+    protected $casts = [
+        'leave_type' => LeaveType::class,
+        'status' => LeaveStatus::class,
+    ];
 }

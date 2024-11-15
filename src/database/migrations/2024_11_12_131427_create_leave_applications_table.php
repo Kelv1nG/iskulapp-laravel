@@ -12,9 +12,9 @@ return new class extends Migration {
             $table->string('employee_name');
             $table->date('start_date');
             $table->date('end_date');
-            $table->string('leave_type');
+            $table->unsignedSmallInteger('leave_type'); 
             $table->text('reason')->nullable();
-            $table->string('status')->default('Pending'); 
+            $table->unsignedSmallInteger('leave_status'); 
             $table->timestamps();
         });
     }
