@@ -9,6 +9,5 @@ class SchoolGallery extends Model
 {
     use HasFactory;
 
-    // Define any fillable fields if necessary
     protected $fillable = ['title', 'description', 'image_path'];
 }
