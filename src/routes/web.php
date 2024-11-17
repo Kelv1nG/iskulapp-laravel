@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('landing.landingpage');
 });
+Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
