@@ -29,14 +29,11 @@ class Event extends Model
         return $this->belongsTo(User::class, 'posted_by');
     }
 
-    /**
-     * Boot method to handle model events.
-     */
     protected static function boot()
     {
         parent::boot();
 
-        // Strip HTML tags from the description before saving
+
         static::saving(function ($event) {
             $event->description = strip_tags($event->description);
         });
