@@ -45,12 +45,12 @@ class GuardianResource extends Resource
                 ->password()
                 ->minLength(8),
     
-            // Add a birth date field
+            
             DatePicker::make('birth_date')
                 ->label('Birth Date')
                 ->required(),
     
-            // Add gender selection
+            
             Select::make('gender')
                 ->label('Gender')
                 ->options([
@@ -68,7 +68,7 @@ class GuardianResource extends Resource
     {
         return $table
             ->columns([
-                // Display full name as "Last Name, First Name"
+                
                 TextColumn::make('Guardian Name')->state(function (Guardian $guardian) {
                     return $guardian->user->userProfile->first_name . ' ' . $guardian->user->userProfile->last_name ;
                 }),
@@ -79,7 +79,7 @@ class GuardianResource extends Resource
             ])
             ->filters([/* Your filters */])
             ->actions([  
-                EditAction::make(),  // Directly adding the EditAction here
+                EditAction::make(),  
             ])
             ->bulkActions([  
                 BulkActionGroup::make([  
@@ -91,7 +91,7 @@ class GuardianResource extends Resource
     public static function getRelations(): array
     {
         return [
-            // Add any relations here if needed, such as a UserProfile relation
+            
         ];
     }
 
@@ -106,14 +106,14 @@ class GuardianResource extends Resource
 
     public static function createGuardianWithUser(array $data)
     {
-        // Check if the email already exists
+        
         $existingUser = User::where('email', $data['user_email'])->first();
         if ($existingUser) {
-            // Handle the case where the email already exists
+            
             throw new \Exception('Email already exists');
         }
     
-        // Create the user with first and last name
+        
         $user = User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
@@ -121,16 +121,16 @@ class GuardianResource extends Resource
             'password' => bcrypt($data['user_password']),
         ]);
     
-        // Assuming there's a UserProfile model that needs to be associated
+        
         $user->userProfile()->create([
             'user_id' => $user->id,
-            'first_name' => $data['first_name'],  // Pass the first name here
-            'last_name' => $data['last_name'],    // Pass the last name here
-            'birth_date' => $data['birth_date'],  // Pass the birth_date here
-            'gender' => $data['gender'],          // Pass the gender here
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'birth_date' => $data['birth_date'],
+            'gender' => $data['gender'],
         ]);
     
-        // Create the Guardian with the resolved user_id
+        
         $guardian = Guardian::create([
             'user_id' => $user->id,
             'created_at' => now(),
