@@ -38,8 +38,9 @@ class EventResource extends Resource
                     ->label('Event Summary')
                     ->maxLength(500)
                     ->rows(3),
-                RichEditor::make('description')
-                    ->label('Event Description'),
+                    RichEditor::make('description')
+                    ->label('Event Description')
+                    ->afterStateUpdated(fn($state, callable $set) => $set('description', strip_tags($state))),                
                 Select::make('school_id')
                     ->relationship('school', 'name')
                     ->required()

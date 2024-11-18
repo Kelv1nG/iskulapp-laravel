@@ -10,14 +10,7 @@ class Event extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'summary',
-        'description',
-        'school_id',
-        'posted_by',
-        'event_schedule',
-    ];
+    protected $fillable = ['title', 'summary', 'description', 'school_id', 'posted_by', 'event_schedule'];
 
     public function school(): BelongsTo
     {
@@ -27,15 +20,5 @@ class Event extends Model
     public function postedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'posted_by');
-    }
-
-    protected static function boot()
-    {
-        parent::boot();
-
-
-        static::saving(function ($event) {
-            $event->description = strip_tags($event->description);
-        });
     }
 }
