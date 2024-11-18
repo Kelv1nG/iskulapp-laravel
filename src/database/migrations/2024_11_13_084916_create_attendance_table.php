@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Student::class); // Foreign key for Student
-            $table->foreignIdFor(AcademicYear::class); // Foreign key for AcademicYear
+            $table->foreignIdFor(Student::class);
+            $table->foreignIdFor(AcademicYear::class);
             $table->date('attendance_date');
-            $table->time('time_in')->nullable();   // Adding time_in column
-            $table->time('time_out')->nullable();  // Adding time_out column
+            $table->time('time_in')->nullable();
+            $table->time('time_out')->nullable();
             $table->timestamps();
         });
     }
