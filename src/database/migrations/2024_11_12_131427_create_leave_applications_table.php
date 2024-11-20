@@ -12,11 +12,12 @@ return new class extends Migration {
             $table->string('employee_name');
             $table->date('start_date');
             $table->date('end_date');
-            $table->unsignedSmallInteger('leave_type'); 
+            $table->enum('leave_type', ['Sick_Leave', 'Vacation_Leave', 'Annual_Leave', 'Maternity_Leave']);
             $table->text('reason')->nullable();
-            $table->unsignedSmallInteger('leave_status'); 
+            $table->enum('leave_status', ['Pending', 'Approved', 'Rejected']);
             $table->timestamps();
         });
+        
     }
 
     public function down(): void

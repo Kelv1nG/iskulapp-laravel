@@ -2,10 +2,10 @@
 
 namespace App\Enums;
 
-enum LeaveType: int
+enum LeaveType: string
 {
-    case SICK_LEAVE = 1;
-    case VACATION_LEAVE = 2;
-    case ANNUAL_LEAVE = 3;
-    case MATERNITY_LEAVE = 4;
+    case SICK_LEAVE = 'Sick_Leave';
+    case VACATION_LEAVE = 'Vacation_Leave';
+    case ANNUAL_LEAVE = 'Annual_Leave';
+    case MATERNITY_LEAVE = 'Maternity_Leave';
 }

@@ -19,7 +19,7 @@ class LeaveApplication extends Model
         'end_date',
         'leave_type',
         'reason',
-        'status',
+        'leave_status',
     ];
 
     protected $dates = ['start_date', 'end_date'];

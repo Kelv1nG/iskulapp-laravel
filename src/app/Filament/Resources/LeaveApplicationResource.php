@@ -42,28 +42,28 @@ class LeaveApplicationResource extends Resource
 
                         Select::make('leave_type')
                             ->label('Leave Type')
-                            ->options([
-                                'Sick Leave' => 'Sick Leave',
-                                'Vacation' => 'Vacation',
-                                'Personal Leave' => 'Personal Leave',
-                            ])
+                            ->options(
+                                collect(LeaveType::cases())
+                                    ->mapWithKeys(fn($case) => [$case->value => str_replace('_', ' ', $case->name)])
+                                    ->toArray()
+                            )
                             ->required(),
 
                         Textarea::make('reason')
                             ->label('Reason')
                             ->maxLength(500),
 
-                        Select::make('status')  
+                        Select::make('status')
                             ->label('Status')
-                            ->options([
-                                'Pending' => 'Pending',
-                                'Approved' => 'Approved',
-                                'Rejected' => 'Rejected',
-                            ])
-                            ->required()  
-                            ->default('Pending'), 
+                            ->options(
+                                collect(LeaveStatus::cases())
+                                    ->mapWithKeys(fn($case) => [$case->value => ucfirst(strtolower($case->name))])
+                                    ->toArray()
+                            )
+                            ->required()
+                            ->default(LeaveStatus::PENDING->value),
                     ])
-                    ->columns(1), 
+                    ->columns(1),
             ]);
     }
 
@@ -85,15 +85,16 @@ class LeaveApplicationResource extends Resource
                     ->sortable(),
 
                 TextColumn::make('leave_type')
-                    ->label('Leave Type'),
+                    ->label('Leave Type')
+                    ->formatStateUsing(fn($state) => str_replace('_', ' ', $state)),
 
-                TextColumn::make('status')
+                TextColumn::make('leave_status')
                     ->label('Status')
                     ->sortable()
                     ->badge(fn($state) => match ($state) {
-                        'Pending' => 'warning',
-                        'Approved' => 'success',
-                        'Rejected' => 'danger',
+                        LeaveStatus::PENDING->value => 'warning',
+                        LeaveStatus::APPROVED->value => 'success',
+                        LeaveStatus::REJECTED->value => 'danger',
                         default => 'secondary',
                     }),
             ])
@@ -101,7 +102,7 @@ class LeaveApplicationResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
-            ->bulkActions([ 
+            ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }

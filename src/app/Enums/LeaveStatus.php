@@ -2,9 +2,9 @@
 
 namespace App\Enums;
 
-enum LeaveStatus: int
+enum LeaveStatus: string 
 {
-    case Pending = 1;
-    case Approved = 2;
-    case Rejected = 3;
+    case PENDING = 'Pending';
+    case APPROVED = 'Approved';
+    case REJECTED = 'Rejected';
 }
