@@ -24,13 +24,13 @@ class Teacher extends Model
         return $this->hasMany(TeacherSubject::class, 'teacher_id', 'id');
     }
 
+    public function sections(): HasMany
+    {
+        return $this->hasMany(TeacherSection::class, 'teacher_id', 'id');
+    }
+
     public function academicYears(): BelongsToMany
     {
         return $this->belongsToMany(AcademicYear::class, 'teacher_year', 'teacher_id', 'academic_year_id');
-    }
-
-    public function section(): BelongsToMany
-    {
-        return $this->belongsToMany(Section::class, 'teacher_sections', 'teacher_id', 'section_id');
     }
 }

@@ -15,13 +15,12 @@ class Assessment extends Model
 
     protected $fillable = [
         'assessment_type',
+        'subject_year_id',
         'prepared_by',
         'approved_by',
         'title',
         'total_questions',
         'is_approved',
-        'start_time',
-        'dead_line',
         'duration_mins',
         'status',
         'created_at',
@@ -29,8 +28,6 @@ class Assessment extends Model
     ];
 
     protected $casts = [
-        'start_time' => 'datetime',
-        'dead_line' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'is_approved' => 'boolean',
@@ -54,5 +51,10 @@ class Assessment extends Model
     public function approvedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by', 'id');
+    }
+
+    public function assessmentTakers(): HasMany
+    {
+        return $this->hasMany(AssessmentTaker::class, 'assessment_id', 'id');
     }
 }
