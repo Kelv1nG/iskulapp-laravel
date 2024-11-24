@@ -33,14 +33,19 @@
       <!-- Links -->
       <div id="menu" class="hidden md:flex space-x-6 mr-10">
         <a
+        href="#about"
+        class="text-blue-700 hover:text-blue-800 font-semibold"
+        >About Us</a
+      >
+        <a
           href="#features"
           class="text-blue-700 hover:text-blue-800 font-semibold"
           >Features</a
         >
         <a
-          href="#contact"
+          href="#faqs"
           class="text-blue-700 hover:text-blue-800 font-semibold"
-          >Contact Us</a
+          >Faqs</a
         >
       </div>
     </div>
@@ -48,14 +53,19 @@
     <!-- Mobile Menu -->
     <div id="mobile-menu" class="md:hidden hidden">
       <a
+      href="#about"
+      class="block mt-5 py-5 rounded-sm px-2 text-blue-700 hover:bg-blue-100 font-semibold"
+      >About Us</a
+    >
+      <a
         href="#features"
         class="block mt-5 py-5 rounded-sm px-2 text-blue-700 hover:bg-blue-100 font-semibold"
         >Features</a
       >
       <a
-        href="#contact"
+        href="#faqs"
         class="block py-5 px-2 rounded-sm text-blue-700 hover:bg-blue-100 font-semibold"
-        >Contact Us</a
+        >Faqs</a
       >
     </div>
   </nav>

@@ -10,7 +10,7 @@
         data-aos="fade-up"
       >
         <img
-          src="./images/Rectangle.png"
+          src="./images/LandingPageMobilePhone.svg"
           alt="app mockup"
           class="h-auto max-w-full"
         />
@@ -18,14 +18,16 @@
 
       <!-- Text Column -->
       <div
-        class="col-span-5 flex flex-col justify-center items-start space-y-6"
+        class="col-span-5 flex flex-col justify-center items-start space-y-6 "
         data-aos="fade-up"
       >
+      <div style="display: inline-block">
         <h1
-          class="text-3xl md:text-4xl font-bold text-blue-700 text-blue-900 drop-shadow-xl"
-        >
-          “Your School, One Tap Away”
-        </h1>
+        class="text-3xl md:text-4xl font-bold text-blue-700 text-blue-900 drop-shadow-xl landingText border-r-4 border-blue-900"
+      >
+        “Your School, One Tap Away”  
+      </h1>
+      </div>
         <p class="text-gray-600 text-lg leading-relaxed">
           From attendance to assignments, stay connected and organized with all
           school essentials in one simple app. Empowering students, teachers,
@@ -35,7 +37,7 @@
           onclick="openBookingModal()"
           class="bg-blue-700 text-white text-lg px-6 py-2 rounded-sm shadow-md hover:bg-blue-950 transition-colors rounded-sm shadow-lg"
         >
-          Book a Demo
+          Message Us
         </button>
       </div>
       <div class="col-span-2"></div>
