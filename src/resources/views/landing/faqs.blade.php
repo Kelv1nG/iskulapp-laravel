@@ -1,4 +1,4 @@
-<div
+<div  data-aos="fade-up"
     class="relative w-full bg-white px-6 pt-10 pb-8 mt-8 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:max-w-2xl sm:rounded-lg sm:px-10 mb-20">
     <div class="mx-auto px-5">
         <div class="flex flex-col items-center">

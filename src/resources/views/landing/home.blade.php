@@ -23,7 +23,7 @@
       >
       <div style="display: inline-block">
         <h1
-        class="text-3xl md:text-4xl font-bold text-blue-700 text-blue-900 drop-shadow-xl landingText border-r-4 border-blue-900"
+        class="text-2xl md:text-3xl lg:text-4xl font-bold text-blue-700 text-blue-900 drop-shadow-xl landingText border-r-4 border-blue-900"
       >
         “Your School, One Tap Away”  
       </h1>
