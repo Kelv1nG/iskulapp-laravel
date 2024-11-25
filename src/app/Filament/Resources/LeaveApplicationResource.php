@@ -2,18 +2,20 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\LeaveApplicationResource\Pages;
-use App\Models\LeaveApplication;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Enums\LeaveType;
+use Filament\Forms\Form;
+use App\Enums\LeaveStatus;
 use Filament\Tables\Table;
+use App\Models\LeaveApplication;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\Select;
-use Filament\Tables\Columns\TextColumn;
+use App\Filament\Resources\LeaveApplicationResource\Pages;
 
 class LeaveApplicationResource extends Resource
 {

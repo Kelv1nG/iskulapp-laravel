@@ -26,6 +26,7 @@ class LeaveApplication extends Model
 
     protected $casts = [
         'leave_type' => LeaveType::class,
-        'status' => LeaveStatus::class,
+        'leave_status' => LeaveStatus::class,
     ];
+    
 }
