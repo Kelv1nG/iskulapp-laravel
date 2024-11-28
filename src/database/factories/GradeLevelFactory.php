@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\School;
+use App\Models\AcademicYear;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Subject>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\GradeLevel>
  */
-class SubjectFactory extends Factory
+class GradeLevelFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,8 +18,8 @@ class SubjectFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->unique()->name(),
-            'school_id' => School::factory(),
+            'academic_year_id' => AcademicYear::factory(),
+            'name' => fake()->name(),
         ];
     }
 }
