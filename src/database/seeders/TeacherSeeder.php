@@ -6,7 +6,6 @@ use App\Enums\RoleEnum;
 use App\Models\AcademicYear;
 use App\Models\School;
 use App\Models\Teacher;
-use App\Models\TeacherSubject;
 use App\Models\User;
 use App\Models\UserProfile;
 use Illuminate\Database\Seeder;
@@ -114,7 +113,7 @@ class TeacherSeeder extends Seeder
         /// offered by school is occupied and each teacher is occupied and have same workload
 
         /// filtering flag is used to filter assigned subjects in multiples of 3 (since 3 is assigned per teacher)
-        $results = DB::select('
+        DB::statement('
             WITH teacher_subject_combinations AS (
                 SELECT DISTINCT
                     teacher_year.teacher_id,
@@ -129,25 +128,16 @@ class TeacherSeeder extends Seeder
                 ORDER BY teacher_year.teacher_id ASC
             )
 
+            INSERT INTO teacher_subjects (
+                teacher_id,
+                subject_year_id
+            )
             SELECT
                 t.teacher_id,
-                t.subject_id,
 				subject_years.id AS subject_year_id
             FROM teacher_subject_combinations AS t
 			RIGHT JOIN subject_years ON subject_years.subject_id = t.subject_id
             WHERE t.subject_id BETWEEN (t.filtering - 2) AND t.filtering;
             ');
-
-        $teacherSubjectRecords = [];
-        foreach ($results as $result) {
-            $teacherSubjectRecords[] = [
-                'teacher_id' => $result->teacher_id,
-                'subject_year_id' => $result->subject_year_id,
-            ];
-        }
-
-        foreach (array_chunk($teacherSubjectRecords, 1000) as $chunk) {
-            TeacherSubject::insert($chunk);
-        }
     }
 }

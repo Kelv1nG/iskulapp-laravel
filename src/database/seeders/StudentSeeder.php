@@ -6,7 +6,6 @@ use App\Enums\RoleEnum;
 use App\Models\School;
 use App\Models\Student;
 use App\Models\StudentSection;
-use App\Models\StudentSubject;
 use App\Models\User;
 use App\Models\UserProfile;
 use Illuminate\Database\Seeder;
@@ -153,7 +152,9 @@ class StudentSeeder extends Seeder
 
     private static function assignSubjects(): void
     {
-        $results = DB::select('
+        DB::statement('
+            INSERT INTO student_subjects
+            (subject_year_id, student_id)
             SELECT DISTINCT
                 subject_classes.subject_year_id AS subject_year_id,
                 student_sections.student_id AS student_id
@@ -162,17 +163,5 @@ class StudentSeeder extends Seeder
             WHERE student_sections.student_id IS NOT NULL
             ORDER BY student_sections.student_id ASC;'
         );
-
-        $studentSubjectRecords = [];
-        foreach ($results as $result) {
-            $studentSubjectRecords[] = [
-                'subject_year_id' => $result->subject_year_id,
-                'student_id' => $result->student_id,
-            ];
-        }
-
-        foreach (array_chunk($studentSubjectRecords, 1000) as $chunk) {
-            StudentSubject::insert($chunk);
-        }
     }
 }
