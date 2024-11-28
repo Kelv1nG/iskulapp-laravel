@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\AcademicYear;
-use App\Models\Subject;
 use App\Models\SubjectYear;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class SubjectYearSeeder extends Seeder
 {
@@ -14,17 +13,34 @@ class SubjectYearSeeder extends Seeder
      */
     public function run(): void
     {
-        $subjectIds = Subject::pluck('id');
-        $academicYearIds = AcademicYear::pluck('id');
+        $subjectYearRecords = $this->prepareSubjectYearRecords();
+        SubjectYear::insert($subjectYearRecords);
+    }
 
-        // create unique combinations of subject_id and academic_year_id
-        $combinations = $subjectIds->crossJoin($academicYearIds)->shuffle();
+    /*
+    * prepare each subject for every academic year for all schools
+    */
+    private function prepareSubjectYearRecords(): array
+    {
+        // combination of academic years and subjects
+        $results = DB::select('
+             SELECT
+                academic_years.id AS academic_year_id,
+                subjects.id as subject_id,
+                subjects.name as subject_name,
+                academic_years.name as academic_year_name
+            FROM subjects
+            LEFT JOIN academic_years ON academic_years.school_id = subjects.school_id
+        ');
 
-        foreach ($combinations as $combination) {
-            SubjectYear::factory()->create([
-                'subject_id' => $combination[0],
-                'academic_year_id' => $combination[1],
-            ]);
+        $subjectYearRecords = [];
+        foreach ($results as $result) {
+            $subjectYearRecords[] = [
+                'academic_year_id' => $result->academic_year_id,
+                'subject_id' => $result->subject_id,
+            ];
         }
+
+        return $subjectYearRecords;
     }
 }
