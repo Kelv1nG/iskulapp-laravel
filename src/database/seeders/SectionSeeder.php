@@ -2,41 +2,44 @@
 
 namespace Database\Seeders;
 
-use App\Models\AcademicYear;
 use App\Models\Section;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class SectionSeeder extends Seeder
 {
+    const SECTION_NAMES = ['A', 'B'];
+
     public function run(): void
     {
-        $latestAcademicYear = AcademicYear::orderBy('end', 'desc')->first();
+        $sectionRecords = $this->prepareSectionRecords();
+        Section::insert($sectionRecords);
+    }
 
-        // Array of section names to use
-        $sectionNames = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+    private function prepareSectionRecords(): array
+    {
+        /// select all grade levels for alls school for all academic years
+        $results = DB::select('
+            SELECT
+                academic_years.id AS academic_year_id,
+                academic_years.school_id,
+                grade_levels.id AS grade_level_id,
+                grade_levels.name AS grade_level_name
+            FROM academic_years
+            LEFT JOIN grade_levels ON grade_levels.school_id = academic_years.school_id
+        ');
 
-        foreach ($sectionNames as $name) {
-            Section::create([
-                'academic_year_id' => $latestAcademicYear->id,
-                'advisor_id' => null,
-                'name' => "Section $name",
-            ]);
+        $sectionRecords = [];
+        foreach ($results as $result) {
+            foreach (self::SECTION_NAMES as $sectionName) {
+                $sectionRecords[] = [
+                    'academic_year_id' => $result->academic_year_id,
+                    'grade_level_id' => $result->grade_level_id,
+                    'name' => $sectionName.'-'.$result->grade_level_name,
+                ];
+            }
         }
 
-        // Get other academic years
-        $otherAcademicYears = AcademicYear::where('id', '!=', $latestAcademicYear->id)
-            ->inRandomOrder()
-            ->get();
-
-        // Create 7 random sections distributed among other academic years
-        $otherAcademicYears
-            ->take(7)
-            ->each(function ($academicYear, $index) use ($sectionNames) {
-                Section::create([
-                    'academic_year_id' => $academicYear->id,
-                    'advisor_id' => null,
-                    'name' => 'Section '.$sectionNames[$index + 3],
-                ]);
-            });
+        return $sectionRecords;
     }
 }
