@@ -10,7 +10,7 @@ class Section extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['academic_year_id', 'advisor_id', 'name'];
+    protected $fillable = ['academic_year_id', 'grade_level_id', 'advisor_id', 'name'];
 
     public function adviser(): BelongsTo
     {
@@ -20,5 +20,10 @@ class Section extends Model
     public function academicYear(): BelongsTo
     {
         return $this->belongsTo(AcademicYear::class, 'academic_year_id', 'id');
+    }
+
+    public function gradeLevel(): BelongsTo
+    {
+        return $this->belongsTo(GradeLevel::class, 'grade_level_id', 'id');
     }
 }

@@ -14,4 +14,9 @@ class School extends Model
     {
         return $this->hasMany(AcademicYear::class, 'academic_year_id', 'id');
     }
+
+    public function gradeLevels(): HasMany
+    {
+        return $this->hasMany(GradeLevel::class, 'school_id', 'id');
+    }
 }
