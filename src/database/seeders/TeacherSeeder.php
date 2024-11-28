@@ -2,196 +2,152 @@
 
 namespace Database\Seeders;
 
-use App\Enums\AssessmentStatus;
-use App\Enums\AssessmentType;
 use App\Enums\RoleEnum;
 use App\Models\AcademicYear;
-use App\Models\Assessment;
-use App\Models\AssessmentQuestion;
-use App\Models\AssessmentQuestionAnswer;
-use App\Models\AssessmentTaker;
-use App\Models\Section;
-use App\Models\SubjectYear;
+use App\Models\School;
 use App\Models\Teacher;
-use App\Models\TeacherSection;
+use App\Models\TeacherSubject;
 use App\Models\User;
 use App\Models\UserProfile;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
 class TeacherSeeder extends Seeder
 {
-    const TEACHER_EXAMPLE_MAIL = 'mslaravel@example.com';
-
-    const TEACHER_EXAMPLE_PASSWORD = 'mslaravel';
-
-    const TEACHER_FIRST_NAME = 'Lara';
-
-    const TEACHER_LAST_NAME = 'Vel';
+    /// calculation is based on
+    /// 6 subjects per grade level * 2 section * 10 / ( 3 subjects * 2 section per teacher) = 120 / 6
+    const TEACHER_COUNT_PER_SCHOOL = 20;
 
     public function run(): void
     {
-        $user = User::factory()->create([
-            'email' => self::TEACHER_EXAMPLE_MAIL,
-            'password' => Hash::make(self::TEACHER_EXAMPLE_PASSWORD),
-        ]);
-
+        $schools = School::all();
         $role = Role::where('name', RoleEnum::TEACHER)->first();
-        $user->assignRole($role);
 
-        UserProfile::factory()->create([
-            'user_id' => $user->id,
-            'first_name' => self::TEACHER_FIRST_NAME,
-            'last_name' => self::TEACHER_LAST_NAME,
-        ]);
+        /// user-teacher creation + academic years
+        foreach ($schools as $school) {
+            $users = $this->createUsers($school);
+            $teachers = $this->createTeachers($users, $role);
+            self::assignAcademicYears($teachers, $school);
+        }
 
-        $teacher = Teacher::factory()->create([
-            'user_id' => $user->id,
-        ]);
-
-        $this->generateTeacherYears($teacher->id);
-        $this->generateTeacherSubjects($teacher->id);
-        $this->generateTeacherSections($teacher);
-        $this->generateAssessments($teacher->id, AssessmentType::ASSIGNMENT->value);
-        $this->assignAssessmentTakers();
+        self::assignSubjects();
     }
 
-    private function generateTeacherSubjects($teacherId): void
+    private function createUsers(School $school): Collection
     {
-        $latestAcademicYear = AcademicYear::orderBy('end', 'desc')->first();
+        $userRecords = [];
+        $hashedPassword = Hash::make('iskulapp');
 
-        $latestSubjectYearIds = SubjectYear::where('academic_year_id', $latestAcademicYear->id)
-            ->pluck('id')
-            ->toArray();
-
-        $records = collect($latestSubjectYearIds)->map(function ($subjectYearId) use ($teacherId) {
-            return [
-                'teacher_id' => $teacherId,
-                'subject_year_id' => $subjectYearId,
+        // in memory of ms laravel
+        for ($i = 1; $i <= self::TEACHER_COUNT_PER_SCHOOL; $i++) {
+            $userRecords[] = [
+                'email' => "teacher-{$i}-{$school->short_name}@example.com",
+                'password' => $hashedPassword,
+                'email_verified_at' => now(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
-        })->toArray();
-
-        // Bulk insert using insertOrIgnore to prevent duplicates
-        DB::table('teacher_subjects')->insertOrIgnore($records);
-    }
-
-    private function generateTeacherSections($teacher): void
-    {
-        $latestAcademicYear = AcademicYear::orderBy('end', 'desc')->first();
-
-        $currentSectionIds = Section::where('academic_year_id', $latestAcademicYear->id)
-            ->pluck('id');
-
-        $notCurrentSectionIds = Section::where('academic_year_id', '!=', $latestAcademicYear->id)
-            ->inRandomOrder()
-            ->take(2)
-            ->pluck('id');
-
-        collect($currentSectionIds)
-            ->concat($notCurrentSectionIds)
-            ->each(fn ($sectionId) => TeacherSection::factory()
-                ->create(['teacher_id' => $teacher->id,
-                    'section_id' => $sectionId, ]));
-    }
-
-    private function generateTeacherYears($teacherId): void
-    {
-        $teacher = Teacher::find($teacherId);
-        $academicYearIds = AcademicYear::pluck('id');
-
-        $teacher->academicYears()->syncWithoutDetaching($academicYearIds);
-    }
-
-    private function generateAssessments(int $userId, string $assessmentType): void
-    {
-        $subjectYears = SubjectYear::all();
-        // create 2 assessment type per assessment status
-        foreach (AssessmentStatus::cases() as $status) {
-            Assessment::factory()->count(2)->create([
-                'assessment_type' => $assessmentType,
-                'subject_year_id' => $subjectYears->random()->id,
-                'prepared_by' => $userId,
-                'status' => $status->value,
-            ]);
         }
-        // create partial number of questions when assessment is of status 'TO BE COMPLETED'
-        $toBeCompletedAssessments = Assessment::where('status', AssessmentStatus::TO_BE_COMPLETED->value)->get();
-        $questionsForToBeCompletedAssessments = $toBeCompletedAssessments->flatMap(function ($assessment) {
-            $count = max(0, $assessment->total_questions - 1);
+        User::insert($userRecords);
 
-            return array_fill(0, $count, ['assessment_id' => $assessment->id]);
-        });
-        $createdQuestions = AssessmentQuestion::factory()
-            ->count($questionsForToBeCompletedAssessments->count())
-            ->sequence(fn ($sequence) => $questionsForToBeCompletedAssessments[$sequence->index])
-            ->create();
-        $this->createAnswersForQuestions($createdQuestions);
+        $users = User::whereIn('email', array_column($userRecords, 'email'))->get();
+        $this->createUserProfiles($users, $school);
 
-        // create complete question set for other status values
-        $completedAssessments = Assessment::where('status', '!=', AssessmentStatus::TO_BE_COMPLETED->value)->get();
-        $questionsForCompletedAssessments = $completedAssessments->flatMap(function ($assessment) {
-            return array_fill(0, $assessment->total_questions, ['assessment_id' => $assessment->id]);
-        });
-
-        $createdQuestionsForCompleted = AssessmentQuestion::factory()
-            ->count($questionsForCompletedAssessments->count())
-            ->sequence(fn ($sequence) => $questionsForCompletedAssessments[$sequence->index])
-            ->create();
-
-        $this->createAnswersForQuestions($createdQuestionsForCompleted);
+        return $users;
     }
 
-    private function createAnswersForQuestions($questions): void
+    private function createUserProfiles(Collection $users, School $school): void
     {
-        foreach ($questions as $question) {
-            switch ($question->question_type) {
-                case 'multiple_choice':
-                    AssessmentQuestionAnswer::factory()->create([
-                        'question_id' => $question->id,
-                        'is_correct' => true,
-                    ]);
-                    AssessmentQuestionAnswer::factory()->count(3)->create([
-                        'question_id' => $question->id,
-                        'is_correct' => false,
-                    ]);
-                    break;
-                case 'true_false':
-                    AssessmentQuestionAnswer::factory()->create([
-                        'question_id' => $question->id,
-                        'is_correct' => true,
-                    ]);
-                    break;
-                case 'short_answer':
-                    AssessmentQuestionAnswer::factory()->count(3)->create([
-                        'question_id' => $question->id,
-                        'is_correct' => true,
-                    ]);
-                    break;
-                case 'essay':
-                    break;
-            }
+        $userProfiles = [];
+
+        foreach ($users as $index => $user) {
+            $userProfiles[] = UserProfile::factory()->make([
+                'user_id' => $user->id,
+                'first_name' => 'Teacher '.($index + 1),
+                'last_name' => $school->short_name,
+            ])->toArray();
+        }
+
+        UserProfile::insert($userProfiles);
+    }
+
+    private function createTeachers(Collection $users, Role $role): Collection
+    {
+        $teachers = [];
+        $roleAssignments = [];
+
+        foreach ($users as $user) {
+            $teachers[] = Teacher::factory()->make([
+                'user_id' => $user->id,
+            ])->toArray();
+
+            $roleAssignments[] = [
+                'role_id' => $role->id,
+                'model_type' => User::class,
+                'model_id' => $user->id,
+            ];
+        }
+
+        DB::table(config('permission.table_names.model_has_roles'))->insert($roleAssignments);
+        Teacher::insert($teachers);
+
+        return Teacher::whereIn('user_id', $users->pluck('id'))->get();
+    }
+
+    /*
+    * assign all academic years of a school to a teacher
+    */
+    private static function assignAcademicYears(Collection $teachers, School $school): void
+    {
+        $academicYearIds = AcademicYear::where('school_id', $school->id)->pluck('id');
+        foreach ($teachers as $teacher) {
+            $teacher->academicYears()->sync($academicYearIds);
         }
     }
 
-    private function assignAssessmentTakers(): void
+    private static function assignSubjects(): void
     {
-        $assessments = Assessment::pluck('id');
-        $latestAcademicYear = AcademicYear::orderBy('end', 'desc')->first();
-        $sections = Section::where('academic_year_id', $latestAcademicYear->id)->get();
+        /// this assigns 3 subject to a teacher so that each subject
+        /// offered by school is occupied and each teacher is occupied and have same workload
 
-        foreach ($assessments as $assessmentId) {
-            $randomSections = $sections->random(min(5, $sections->count()))->pluck('id');
+        /// filtering flag is used to filter assigned subjects in multiples of 3 (since 3 is assigned per teacher)
+        $results = DB::select('
+            WITH teacher_subject_combinations AS (
+                SELECT DISTINCT
+                    teacher_year.teacher_id,
+                    academic_years.school_id,
+                    subjects.id AS subject_id,
+                    (teacher_year.teacher_id * 3) AS filtering
+                FROM teacher_year
+                LEFT JOIN academic_years
+                    ON academic_years.id = teacher_year.academic_year_id
+                LEFT JOIN subjects
+                    ON academic_years.school_id = subjects.school_id
+                ORDER BY teacher_year.teacher_id ASC
+            )
 
-            foreach ($randomSections as $sectionId) {
-                AssessmentTaker::factory()->create([
-                    'assessment_id' => $assessmentId,
-                    'section_id' => $sectionId,
-                ]);
-            }
+            SELECT
+                t.teacher_id,
+                t.subject_id,
+				subject_years.id AS subject_year_id
+            FROM teacher_subject_combinations AS t
+			RIGHT JOIN subject_years ON subject_years.subject_id = t.subject_id
+            WHERE t.subject_id BETWEEN (t.filtering - 2) AND t.filtering;
+            ');
+
+        $teacherSubjectRecords = [];
+        foreach ($results as $result) {
+            $teacherSubjectRecords[] = [
+                'teacher_id' => $result->teacher_id,
+                'subject_year_id' => $result->subject_year_id,
+            ];
+        }
+
+        foreach (array_chunk($teacherSubjectRecords, 1000) as $chunk) {
+            TeacherSubject::insert($chunk);
         }
     }
 }
