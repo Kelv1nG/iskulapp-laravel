@@ -2,6 +2,7 @@
 
 use App\Models\AssessmentQuestion;
 use App\Models\AssessmentQuestionAnswer;
+use App\Models\AssessmentStudentReport;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,10 +17,12 @@ return new class extends Migration
     {
         Schema::create('assessment_student_answers', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(AssessmentStudentReport::class, 'assessment_student_report_id');
             $table->foreignIdFor(AssessmentQuestion::class, 'question_id');
             $table->foreignIdFor(User::class, 'student_id');
             $table->foreignIdFor(AssessmentQuestionAnswer::class, 'answer_id')->nullable(true);
 
+            $table->boolean('is_correct')->default(false);
             $table->text('answer_text')->nullable(true);
             $table->tinyInteger('score')->default(0);
             $table->boolean('is_checked')->default(false);

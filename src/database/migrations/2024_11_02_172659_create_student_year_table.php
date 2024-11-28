@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('student_year', function (Blueprint $table) {
             $table->foreignIdFor(Student::class, 'student_id');
             $table->foreignIdFor(AcademicYear::class, 'academic_year_id');
-            $table->timestamps();
         });
     }
 

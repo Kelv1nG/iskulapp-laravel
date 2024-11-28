@@ -1,6 +1,7 @@
 <?php
 
-use App\Models\AssessmentQuestion;
+use App\Models\Student;
+use App\Models\SubjectYear;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,12 +13,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('assessment_question_answers', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignIdFor(AssessmentQuestion::class, 'question_id');
+        Schema::create('student_subjects', function (Blueprint $table) {
+            $table->id();
 
-            $table->string('answer');
-            $table->boolean('is_correct');
+            $table->foreignIdFor(Student::class, 'student_id');
+            $table->foreignIdFor(SubjectYear::class, 'subject_year_id');
 
             $table->timestamps();
         });
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('assessment_question_answers');
+        Schema::dropIfExists('student_subjects');
     }
 };

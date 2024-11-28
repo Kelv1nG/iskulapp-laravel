@@ -1,6 +1,7 @@
 <?php
 
-use App\Models\AssessmentQuestion;
+use App\Enums\DayOfWeek;
+use App\Models\SubjectClass;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,13 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('assessment_question_answers', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignIdFor(AssessmentQuestion::class, 'question_id');
-
-            $table->string('answer');
-            $table->boolean('is_correct');
-
+        Schema::create('subject_class_schedules', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(SubjectClass::class, 'subject_class_id');
+            $table->enum('day', array_column(DayOfWeek::cases(), 'value'));
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('assessment_question_answers');
+        Schema::dropIfExists('subject_schedules');
     }
 };
