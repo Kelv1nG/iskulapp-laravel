@@ -48,6 +48,7 @@ class AssessmentQuestionAnswerKeySeeder extends Seeder
         $trueOrFalseQuestions = AssessmentQuestion::where('question_type', 'true_or_false')->get();
         foreach ($trueOrFalseQuestions as $trueOrFalseQuestion) {
             $answerRecords[] = AssessmentQuestionAnswer::factory()->make([
+                'answer' => rand(0, 1) ? 'true' : 'false',
                 'question_id' => $trueOrFalseQuestion->id,
                 'is_correct' => true,
             ])->attributesToArray();
