@@ -1,9 +1,9 @@
 <?php
 
-use App\Enums\DayOfWeek;
 use App\Models\SubjectClass;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('subject_class_schedules', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(SubjectClass::class, 'subject_class_id');
-            $table->enum('day', array_column(DayOfWeek::cases(), 'value'));
+            $table->enum('day', collect(Carbon::getDays())->values()->all());
             $table->timestamps();
         });
     }
