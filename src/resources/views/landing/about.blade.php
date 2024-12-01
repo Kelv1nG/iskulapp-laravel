@@ -1,8 +1,8 @@
-<section  class="w-full bg-opacity-20 py-10 " style="background-color: var(--primary-color)"  id="about">
+<section  class="w-full bg-opacity-20 pt-20" style="background-color: var(--primary-color)">
   <div class="grid grid-cols-12" >
     <div class="lg:col-span-2 col-span-1"  ></div>
     <div class="lg:col-span-8 col-span-10">
-      <div class="w-full flex justify-center flex-col p-5" data-aos="fade-up">
+      <div class="w-full flex justify-center flex-col p-5" data-aos="fade-up" >
         <h1 class="text-3xl text-center md:text-4xl font-bold text-blue-600 cursor-pointer">
           What is iskulapp.ph?
         </h1>
@@ -41,4 +41,5 @@
     <div class="lg:col-span-2 col-span-1"></div>
   </div>
   
+
   </section>
