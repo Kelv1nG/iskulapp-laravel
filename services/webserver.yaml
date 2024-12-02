@@ -1,5 +1,7 @@
 services:
   nginx:
+    environment:
+      - SCHOOL_ERP_BACKEND_PORT=${SCHOOL_ERP_BACKEND_PORT}
     container_name: webserver
     build:
       context:
