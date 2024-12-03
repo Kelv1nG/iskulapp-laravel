@@ -80,15 +80,15 @@ class User extends Authenticatable implements FilamentUser, HasName
 
         return match ($role) {
             RoleEnum::TEACHER->value => $this->teacher?->academicYears()
-                ->latest('created_at')
+                ->latest('end')
                 ->first(),
             RoleEnum::STUDENT->value => $this->student?->academicYears()
-                ->latest('created_at')
+                ->latest('end')
                 ->first(),
             default => null
         };
     }
-  
+
     public function getFilamentName(): string
     {
         return 'Admin';

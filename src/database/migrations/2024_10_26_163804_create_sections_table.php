@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\AcademicYear;
+use App\Models\GradeLevel;
 use App\Models\Teacher;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,6 +17,7 @@ return new class extends Migration
         Schema::create('sections', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(AcademicYear::class, 'academic_year_id');
+            $table->foreignIdFor(GradeLevel::class, 'grade_level_id');
             $table->foreignIdFor(Teacher::class, 'advisor_id')->nullable();
 
             $table->String('name');

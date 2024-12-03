@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -8,7 +9,7 @@ class FAQ extends Model
 {
     use HasFactory;
 
-    protected $table = 'faqs'; 
+    protected $table = 'faqs';
 
     protected $fillable = [
         'question',
@@ -17,8 +18,8 @@ class FAQ extends Model
 
     public $timestamps = true;
 
-        public function scopeSearchByQuestion($query, $searchTerm)
+    public function scopeSearchByQuestion($query, $searchTerm)
     {
-        return $query->where('question', 'like', '%' . $searchTerm . '%');
+        return $query->where('question', 'like', '%'.$searchTerm.'%');
     }
 }

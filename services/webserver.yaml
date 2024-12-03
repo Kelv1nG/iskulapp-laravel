@@ -1,11 +1,13 @@
 services:
   nginx:
+    environment:
+      - SCHOOL_ERP_BACKEND_PORT=${SCHOOL_ERP_BACKEND_PORT}
     container_name: webserver
     build:
       context:
         ../docker/nginx
     ports:
-      - "6061:6061"
+      - ${SCHOOL_ERP_BACKEND_PORT}:${SCHOOL_ERP_BACKEND_PORT}
     depends_on:
       - school-erp-backend
     volumes:

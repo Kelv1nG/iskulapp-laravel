@@ -23,12 +23,12 @@ composer-update:
 migrate-seed:
 	docker exec -u root school-erp-backend bash -c "php artisan migrate"
 	docker exec -u root school-erp-backend bash -c "php artisan migrate --path=database/migrations/powersync_publication"
-	docker exec -u root school-erp-backend bash -c "php artisan db:seed"
+	docker exec -u root school-erp-backend bash -c "php -d memory_limit=512M artisan db:seed"
 
 refresh-db:
 	docker exec -u root school-erp-backend bash -c "php artisan migrate:fresh"
 	docker exec -u root school-erp-backend bash -c "php artisan migrate --path=database/migrations/powersync_publication"
-	docker exec -u root school-erp-backend bash -c "php artisan db:seed"
+	docker exec -u root school-erp-backend bash -c "php -d memory_limit=512M artisan db:seed"
 
 generate-keys:
 	docker exec -u root school-erp-backend bash -c "php artisan key:generate"

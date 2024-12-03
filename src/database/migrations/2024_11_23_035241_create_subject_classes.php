@@ -1,12 +1,12 @@
 <?php
 
 use App\Models\Section;
+use App\Models\SubjectYear;
 use App\Models\Teacher;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-// NOTE:: this is to be removed
 return new class extends Migration
 {
     /**
@@ -14,10 +14,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('teacher_sections', function (Blueprint $table) {
+        Schema::create('subject_classes', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Teacher::class, 'teacher_id');
+            $table->foreignIdFor(SubjectYear::class, 'subject_year_id');
             $table->foreignIdFor(Section::class, 'section_id');
+            $table->foreignIdFor(Teacher::class, 'teacher_id');
 
             $table->timestamps();
         });
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('teacher_sections');
+        Schema::dropIfExists('subject_classes');
     }
 };

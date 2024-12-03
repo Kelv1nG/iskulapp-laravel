@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\AssessmentQuestion;
+use App\Models\School;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,13 +12,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('assessment_question_answers', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignIdFor(AssessmentQuestion::class, 'question_id');
+        Schema::create('grade_levels', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(School::class, 'school_id');
 
-            $table->string('answer');
-            $table->boolean('is_correct');
-
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('assessment_question_answers');
+        Schema::dropIfExists('grade_levels');
     }
 };

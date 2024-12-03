@@ -1,24 +1,20 @@
 <?php
 
-use App\Models\Section;
-use App\Models\Teacher;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-// NOTE:: this is to be removed
 return new class extends Migration
 {
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('teacher_sections', function (Blueprint $table) {
+        Schema::create('faqs', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Teacher::class, 'teacher_id');
-            $table->foreignIdFor(Section::class, 'section_id');
-
+            $table->string('question');
+            $table->text('answer');
             $table->timestamps();
         });
     }
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('teacher_sections');
+        Schema::dropIfExists('faqs');
     }
 };
