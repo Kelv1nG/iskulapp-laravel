@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Assessment;
 use App\Models\AssessmentQuestion;
 use App\Models\AssessmentQuestionAnswer;
 use App\Models\AssessmentStudentReport;
@@ -16,8 +17,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('assessment_student_answers', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->foreignIdFor(AssessmentStudentReport::class, 'assessment_student_report_id');
+            $table->foreignIdFor(Assessment::class, 'assessment_id');
             $table->foreignIdFor(AssessmentQuestion::class, 'question_id');
             $table->foreignIdFor(User::class, 'student_id');
             $table->foreignIdFor(AssessmentQuestionAnswer::class, 'answer_id')->nullable(true);
