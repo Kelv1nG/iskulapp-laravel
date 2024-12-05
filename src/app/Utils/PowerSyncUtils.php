@@ -2,6 +2,10 @@
 
 namespace App\Utils;
 
+use App\Enums\RoleEnum;
+use App\Models\Student;
+use App\Models\Teacher;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Config;
 use Jose\Component\Core\AlgorithmManager;
@@ -28,7 +32,7 @@ class PowerSyncUtils
         }
     }
 
-    public static function createJwtToken($userId)
+    public static function createJwtToken(User $user)
     {
         self::ensureKeys();
         $privateKeyJson = json_decode(base64_decode(self::$powerSyncPrivateKey), true);
@@ -39,11 +43,28 @@ class PowerSyncUtils
 
         $jwk = new JWK($privateKeyJson);
 
+        $teacher = self::getTeacher($user);
+        $teacherCurrentSubjects = $teacher ? array_values($teacher->currentSubjectYears()->pluck('id')->toArray()) : [];
+
+        $student = self::getStudent($user);
+        $studentCurrentSubjects = $student ? array_values($student->currentSubjectYears()->pluck('id')->toArray()) : [];
+        $studentCurrentSections = $student ? array_values($student->currentSections()->pluck('id')->toArray()) : [];
+
         $payload = json_encode([
-            'sub' => $userId,
+            'sub' => $user->id,
             'iat' => time(),
             'aud' => self::$powerSyncUrl,
             'exp' => time() + 300, // unit is in seconds
+
+            'current_school_id' => $user->getCurrentSchool()->id,
+            'current_academic_year_id' => $user->getCurrentAcademicYear()->id,
+
+            'teacher_id' => $teacher?->id,
+            'teacher_current_subject_years' => $teacherCurrentSubjects,
+
+            'student_id' => $student?->id,
+            'student_current_subject_years' => $studentCurrentSubjects,
+            'student_current_sections' => $studentCurrentSections,
         ]);
 
         // Create AlgorithmManager with RS256
@@ -74,5 +95,26 @@ class PowerSyncUtils
         $publicKeyJson = json_decode(base64_decode(self::$powerSyncPublicKey), true);
 
         return $publicKeyJson;
+    }
+
+    private static function getTeacher($user): ?Teacher
+    {
+        $teacherId = self::getLoginSpecificId($user, RoleEnum::TEACHER->value);
+
+        return Teacher::find($teacherId);
+    }
+
+    private static function getStudent($user): ?Student
+    {
+        $studentId = self::getLoginSpecificId($user, RoleEnum::STUDENT->value);
+
+        return Student::find($studentId);
+    }
+
+    private static function getLoginSpecificId($user, string $role): ?int
+    {
+        return $user->getRoleNames()->first() === $role
+            ? $user->getLoginId()
+            : null;
     }
 }
