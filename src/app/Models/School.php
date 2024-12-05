@@ -12,7 +12,7 @@ class School extends Model
 
     public function academicYears(): HasMany
     {
-        return $this->hasMany(AcademicYear::class, 'academic_year_id', 'id');
+        return $this->hasMany(AcademicYear::class, 'school_id', 'id');
     }
 
     public function gradeLevels(): HasMany

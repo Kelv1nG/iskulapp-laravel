@@ -20,6 +20,7 @@ class AssessmentStudentAnswerSeeder extends Seeder
             WITH multiple_choice_answers AS (
                 SELECT
                     questions.id AS question_id,
+                    assessments.id AS assessment_id,
                     questions.question_type AS question_type,
                     student_reports.student_id,
                     student_reports.id AS student_report_id,
@@ -38,6 +39,7 @@ class AssessmentStudentAnswerSeeder extends Seeder
             randomized_answers AS (
                 SELECT DISTINCT ON (question_id, student_id)
                     student_report_id,
+                    assessment_id,
                     question_id,
                     student_id,
                     answer_id,
@@ -47,13 +49,16 @@ class AssessmentStudentAnswerSeeder extends Seeder
             )
 
             INSERT INTO assessment_student_answers(
+                id,
                 assessment_student_report_id,
+                assessment_id,
                 question_id,
                 student_id,
                 answer_id,
                 is_correct
             )
-            SELECT * FROM randomized_answers
+            SELECT gen_random_uuid(), *
+            FROM randomized_answers
         ");
     }
 
@@ -63,6 +68,7 @@ class AssessmentStudentAnswerSeeder extends Seeder
             WITH true_or_false_answers AS (
                 SELECT
                     questions.id AS question_id,
+                    assessments.id AS assessment_id,
                     questions.question_type AS question_type,
                     student_reports.student_id,
                     student_reports.id AS student_report_id,
@@ -81,6 +87,7 @@ class AssessmentStudentAnswerSeeder extends Seeder
             insert_data AS (
                 SELECT
                     student_report_id,
+                    assessment_id,
                     question_id,
                     student_id,
                     answer_id,
@@ -89,13 +96,16 @@ class AssessmentStudentAnswerSeeder extends Seeder
             )
 
             INSERT INTO assessment_student_answers(
+                id,
                 assessment_student_report_id,
+                assessment_id,
                 question_id,
                 student_id,
                 answer_id,
                 is_correct
             )
-            SELECT * FROM insert_data
+            SELECT gen_random_uuid(), *
+            FROM insert_data
         ");
     }
 
@@ -107,6 +117,7 @@ class AssessmentStudentAnswerSeeder extends Seeder
         DB::statement("
         WITH essay_or_short_answers AS (
             SELECT
+                assessments.id AS assessment_id,
                 questions.id AS question_id,
                 questions.question_type AS question_type,
                 student_reports.student_id,
@@ -122,17 +133,21 @@ class AssessmentStudentAnswerSeeder extends Seeder
         insert_data AS (
             SELECT
                 student_report_id,
+                assessment_id,
                 question_id,
                 student_id
             FROM essay_or_short_answers
         )
         INSERT INTO assessment_student_answers(
+            id,
             assessment_student_report_id,
+            assessment_id,
             question_id,
             student_id,
             answer_text
         )
-        SELECT insert_data.*, md5(random()::text) FROM insert_data
+        SELECT gen_random_uuid(), insert_data.*, md5(random()::text)
+        FROM insert_data
         ");
     }
 }

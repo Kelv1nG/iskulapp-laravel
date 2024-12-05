@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\RoleEnum;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
@@ -87,6 +86,13 @@ class User extends Authenticatable implements FilamentUser, HasName
                 ->first(),
             default => null
         };
+    }
+
+    public function getCurrentSchool(): ?School
+    {
+        $academicYear = $this->getCurrentAcademicYear();
+
+        return $academicYear?->school;
     }
 
     public function getFilamentName(): string

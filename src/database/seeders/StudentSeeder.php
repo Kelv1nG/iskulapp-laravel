@@ -40,8 +40,9 @@ class StudentSeeder extends Seeder
             $students = $this->createStudents($users, $role);
 
             self::assignSection($students, $school);
-            self::assignSubjects();
         }
+        self::assignSubjects();
+        self::assignAcademicYears();
     }
 
     private function createUsers(School $school): Collection
@@ -163,5 +164,19 @@ class StudentSeeder extends Seeder
             WHERE student_sections.student_id IS NOT NULL
             ORDER BY student_sections.student_id ASC;'
         );
+    }
+
+    private static function assignAcademicYears(): void
+    {
+        DB::statement('
+            INSERT INTO student_year
+            (student_id, academic_year_id)
+            SELECT DISTINCT
+                student_sections.student_id,
+                sections.academic_year_id
+            FROM student_sections
+            LEFT JOIN sections ON sections.id = student_sections.section_id
+            ORDER BY student_sections.student_id ASC
+        ');
     }
 }

@@ -3,20 +3,173 @@
 # Note that changes to this file are not watched.
 # The service needs to be restarted for changes to take effect.
 bucket_definitions:
-  global:
-    data:
-      - SELECT * FROM subjects
-      - SELECT * FROM academic_years 
-      - SELECT * FROM subject_years # temporary
-      - SELECT * FROM assessment_takers # temporary
-      - SELECT * FROM sections
-
-  teacher_info:
+  school:
     parameters:
-      - SELECT id as teacher_id FROM teachers WHERE user_id = request.user_id()
+      - SELECT request.jwt() ->> 'current_school_id' AS current_school_id
+
     data:
-      - SELECT * FROM teachers WHERE id = bucket.teacher_id
-      - SELECT * FROM teacher_year WHERE teacher_id = bucket.teacher_id
-      - SELECT * FROM teacher_subjects WHERE teacher_id = bucket.teacher_id
-      - SELECT * FROM teacher_sections WHERE teacher_id = bucket.teacher_id
-      - SELECT * FROM assessments WHERE prepared_by = bucket.teacher_id
+      - SELECT * 
+        FROM academic_years 
+        WHERE school_id = bucket.current_school_id
+
+      - SELECT * 
+        FROM grade_levels 
+        WHERE grade_levels.school_id = bucket.current_school_id
+
+      - SELECT * 
+        FROM subjects 
+        WHERE subjects.school_id = bucket.current_school_id
+
+  # TEACHER
+  teacher_by_subject_year:
+    parameters:
+      - SELECT id  AS subject_year_id
+        FROM subject_years
+        WHERE id IN request.jwt() ->> 'teacher_current_subject_years'
+
+    data:
+      - SELECT *
+        FROM subject_years
+        WHERE id = bucket.subject_year_id
+
+      - SELECT * 
+        FROM subject_classes 
+        WHERE subject_year_id = bucket.subject_year_id
+
+      - SELECT *
+        FROM teacher_subjects
+        WHERE subject_year_id = bucket.subject_year_id
+
+      - SELECT *
+        FROM student_subjects
+        WHERE subject_year_id = bucket.subject_year_id
+
+  teacher_by_assessment:
+    parameters:
+      # after filtering on teacher id
+      # we could narrow it down a bit further by filtering on the current subject years
+      # to create fewer buckets
+      - SELECT id AS assessment_id
+        FROM assessments
+        WHERE subject_year_id IN request.jwt() ->> 'teacher_current_subject_years'
+        AND prepared_by = request.jwt() ->> 'teacher_id'
+
+    data:
+      - SELECT *
+        FROM assessments 
+        WHERE id = bucket.assessment_id
+
+      - SELECT *
+        FROM assessment_takers
+        WHERE assessment_id = bucket.assessment_id
+
+      - SELECT *
+        FROM assessment_questions
+        WHERE assessment_id = bucket.assessment_id
+
+      - SELECT *
+        FROM assessment_question_answers
+        WHERE assessment_id = bucket.assessment_id
+
+      - SELECT *
+        FROM assessment_student_reports
+        WHERE assessment_id = bucket.assessment_id
+
+      - SELECT *
+        FROM assessment_student_answers
+        WHERE assessment_id = bucket.assessment_id
+
+  teacher_by_section:
+    parameters:
+      - SELECT section_id
+        FROM subject_classes
+        WHERE subject_year_id IN request.jwt() ->> 'teacher_current_subject_years'
+        AND teacher_id = request.jwt() ->> 'teacher_id'
+
+    data:
+      - SELECT *
+        FROM student_sections
+        WHERE section_id = bucket.section_id
+
+
+  # STUDENT 
+  student_by_id:
+    # this syncs all records of a given student in this bucket
+    parameters:
+      - SELECT request.jwt() ->> 'student_id' AS student_id
+
+    data:
+      - SELECT *
+        FROM students
+        WHERE id = bucket.student_id
+
+      - SELECT *
+        FROM student_year
+        WHERE student_id = bucket.student_id
+
+      - SELECT *
+        FROM student_subjects
+        WHERE student_id = bucket.student_id
+
+      - SELECT *
+        FROM student_sections
+        WHERE student_id = bucket.student_id
+
+      - SELECT *
+        FROM assessment_student_reports
+        WHERE student_id = bucket.student_id
+
+      - SELECT *
+        FROM assessment_student_answers
+        WHERE student_id = bucket.student_id
+
+
+  student_by_subject_year:
+    parameters:
+      - SELECT id  AS subject_year_id
+        FROM subject_years
+        WHERE id IN request.jwt() ->> 'student_current_subject_years'
+
+    data:
+      - SELECT *
+        FROM subject_years
+        WHERE id = bucket.subject_year_id
+
+      - SELECT * 
+        FROM subject_classes 
+        WHERE subject_year_id = bucket.subject_year_id
+
+
+  student_by_assessment:
+    parameters:
+      - SELECT assessment_id
+        FROM assessment_takers
+        WHERE section_id IN request.jwt() ->> 'student_current_sections'
+
+    data:
+      - SELECT * 
+        FROM assessment_takers
+        WHERE assessment_id = bucket.assessment_id
+
+      - SELECT * 
+        FROM assessments
+        WHERE id = bucket.assessment_id
+
+      - SELECT * 
+        FROM assessment_questions
+        WHERE assessment_id = bucket.assessment_id
+
+      - SELECT * 
+        FROM assessment_question_answers
+        WHERE assessment_id = bucket.assessment_id
+
+  student_by_section:
+    parameters:
+      - SELECT id AS section_id
+        FROM sections
+        WHERE id IN request.jwt() ->> 'student_current_sections'
+
+    data:
+      - SELECT * 
+        FROM sections
+        WHERE id = bucket.section_id

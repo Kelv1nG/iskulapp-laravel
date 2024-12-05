@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 class Teacher extends Model
 {
@@ -19,18 +20,36 @@ class Teacher extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function subjects(): HasMany
+    public function subjectYears(): BelongsToMany
     {
-        return $this->hasMany(TeacherSubject::class, 'teacher_id', 'id');
-    }
-
-    public function sections(): HasMany
-    {
-        return $this->hasMany(TeacherSection::class, 'teacher_id', 'id');
+        return $this->belongsToMany(SubjectYear::class, 'teacher_subjects', 'teacher_id', 'subject_year_id');
     }
 
     public function academicYears(): BelongsToMany
     {
         return $this->belongsToMany(AcademicYear::class, 'teacher_year', 'teacher_id', 'academic_year_id');
+    }
+
+    public function subjectClasses(): HasMany
+    {
+        return $this->hasMany(SubjectClass::class, 'teacher_id', 'id');
+    }
+
+    public function currentSubjectClasses(): Collection
+    {
+        $currentAcademicYear = $this->user->getCurrentAcademicYear();
+
+        return $this->classes()
+            ->where('academic_year_id', $currentAcademicYear->id)
+            ->get();
+    }
+
+    public function currentSubjectYears(): Collection
+    {
+        $currentAcademicYear = $this->user->getCurrentAcademicYear();
+
+        return $this->subjectYears()
+            ->where('academic_year_id', $currentAcademicYear->id)
+            ->get();
     }
 }

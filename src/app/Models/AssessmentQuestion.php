@@ -10,8 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class AssessmentQuestion extends Model
 {
-    use HasFactory;
-    use HasUuids;
+    use HasFactory, HasUuids;
 
     protected $fillable = [
         'assessment_id',
