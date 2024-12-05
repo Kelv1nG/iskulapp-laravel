@@ -19,14 +19,23 @@ return new class extends Migration
                 CREATE PUBLICATION powersync FOR TABLE
                     assessments,
                     assessment_takers,
+                    assessment_questions,
+                    assessment_question_answers,
+                    assessment_student_reports,
+                    assessment_student_answers,
                     academic_years,
+                    grade_levels,
+                    sections,
                     subjects,
+                    subject_classes,
                     subject_years,
                     teachers,
                     teacher_year,
                     teacher_subjects,
-                    teacher_sections,
-                    sections;
+                    students,
+                    student_year,
+                    student_subjects,
+                    student_sections;
             END $$;
         ');
     }
