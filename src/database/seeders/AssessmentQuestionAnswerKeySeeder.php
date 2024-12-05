@@ -32,12 +32,14 @@ class AssessmentQuestionAnswerKeySeeder extends Seeder
         $multipleChoiceQuestions = AssessmentQuestion::where('question_type', 'multiple_choice')->get();
         foreach ($multipleChoiceQuestions as $multipleChoiceQuestion) {
             $answerRecords[] = AssessmentQuestionAnswer::factory()->make([
+                'assessment_id' => $multipleChoiceQuestion->assessment_id,
                 'question_id' => $multipleChoiceQuestion->id,
                 'is_correct' => true,
             ])->attributesToArray();
 
             for ($i = 0; $i < 3; $i++) {
                 $answerRecords[] = AssessmentQuestionAnswer::factory()->make([
+                    'assessment_id' => $multipleChoiceQuestion->assessment_id,
                     'question_id' => $multipleChoiceQuestion->id,
                     'is_correct' => false,
                 ])->attributesToArray();
@@ -48,6 +50,7 @@ class AssessmentQuestionAnswerKeySeeder extends Seeder
         $trueOrFalseQuestions = AssessmentQuestion::where('question_type', 'true_or_false')->get();
         foreach ($trueOrFalseQuestions as $trueOrFalseQuestion) {
             $answerRecords[] = AssessmentQuestionAnswer::factory()->make([
+                'assessment_id' => $trueOrFalseQuestion->assessment_id,
                 'answer' => rand(0, 1) ? 'true' : 'false',
                 'question_id' => $trueOrFalseQuestion->id,
                 'is_correct' => true,
@@ -59,6 +62,7 @@ class AssessmentQuestionAnswerKeySeeder extends Seeder
         foreach ($shortAnswerQuestions as $shortAnswerQuestion) {
             for ($i = 0; $i < 3; $i++) {
                 $answerRecords[] = AssessmentQuestionAnswer::factory()->make([
+                    'assessment_id' => $shortAnswerQuestion->assessment_id,
                     'question_id' => $shortAnswerQuestion->id,
                     'is_correct' => true,
                 ])->attributesToArray();

@@ -41,8 +41,8 @@ class AssessmentStudentReportSeeder extends Seeder
             )
 
             INSERT INTO assessment_student_reports
-            (student_id, assessment_id, started_at, finished_at)
-            SELECT *
+            (id, student_id, assessment_id, started_at, finished_at)
+            SELECT gen_random_uuid(), *
             FROM insert_data
         ');
 
