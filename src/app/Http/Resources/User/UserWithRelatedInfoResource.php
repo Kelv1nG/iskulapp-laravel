@@ -14,16 +14,19 @@ class UserWithRelatedInfoResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        /// int ids are converted to string for consistency with string uuids in mobile
         return [
-            'id' => $this->id,
-            'login_type' => $this->getRoleNames()->first(),
-            'login_id' => $this->getLoginId(),
+            'id' => strval($this->id),
+            'login_type' => $this->getRoleNames()?->first(),
+            'login_id' => strval($this->getLoginId()),
+            'role' => $this->getRoleNames()?->first(),
             'email' => $this->email,
             'first_name' => $this->userProfile->first_name,
             'last_name' => $this->userProfile->last_name,
-            'role' => $this->getRoleNames()->first(),
-            'school_name' => $this->getCurrentAcademicYear()->school->short_name,
-            'academic_year' => $this->getCurrentAcademicYear()->name,
+            'school_id' => strval($this->getCurrentAcademicYear()?->school->id),
+            'school_name' => $this->getCurrentAcademicYear()?->school->short_name,
+            'academic_year_id' => strval($this->getCurrentAcademicYear()?->id),
+            'academic_year_name' => $this->getCurrentAcademicYear()?->name,
         ];
     }
 }
