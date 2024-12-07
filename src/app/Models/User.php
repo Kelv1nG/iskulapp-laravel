@@ -62,7 +62,7 @@ class User extends Authenticatable implements FilamentUser, HasName
         return $this->hasOne(Student::class);
     }
 
-    public function getLoginId(): ?string
+    public function getLoginId(): ?int
     {
         $role = $this->getRoleNames()->first();
 

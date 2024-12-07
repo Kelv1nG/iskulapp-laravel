@@ -24,6 +24,8 @@ class AssessmentTaker extends Model
     protected $casts = [
         'start_time' => 'datetime',
         'dead_line' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public function assessment(): BelongsTo
