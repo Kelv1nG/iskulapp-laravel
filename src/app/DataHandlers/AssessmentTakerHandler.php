@@ -22,5 +22,8 @@ class AssessmentTakerHandler extends BaseHandler
         $assessmentTaker->update($filteredData);
     }
 
-    public static function delete($data) {}
+    public static function delete($data)
+    {
+        AssessmentTaker::findOrFail($data['id'])->delete();
+    }
 }
