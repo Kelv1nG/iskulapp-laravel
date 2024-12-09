@@ -23,5 +23,8 @@ class AssessmentHandler extends BaseHandler
         $assessment->update($filteredData);
     }
 
-    public static function delete($data) {}
+    public static function delete($data)
+    {
+        Assessment::findOrFail($data['id'])->delete();
+    }
 }

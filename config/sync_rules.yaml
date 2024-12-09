@@ -91,6 +91,10 @@ bucket_definitions:
         FROM student_sections
         WHERE section_id = bucket.section_id
 
+      - SELECT *
+        FROM sections
+        WHERE id = bucket.section_id
+
 
   # STUDENT 
   student_by_id:
