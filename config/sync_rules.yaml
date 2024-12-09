@@ -21,6 +21,15 @@ bucket_definitions:
         WHERE subjects.school_id = bucket.current_school_id
 
   # TEACHER
+  teacher_by_id:
+    parameters:
+      - SELECT request.jwt() ->> 'teacher_id' AS teacher_id
+
+    data:
+      - SELECT *
+        FROM assessments
+        WHERE prepared_by = bucket.teacher_id
+
   teacher_by_subject_year:
     parameters:
       - SELECT id  AS subject_year_id
@@ -55,10 +64,11 @@ bucket_definitions:
         AND prepared_by = request.jwt() ->> 'teacher_id'
 
     data:
-      - SELECT *
-        FROM assessments 
-        WHERE id = bucket.assessment_id
-
+      # temporary changed
+      # - SELECT *
+      #   FROM assessments 
+      #   WHERE id = bucket.assessment_id
+      #
       - SELECT *
         FROM assessment_takers
         WHERE assessment_id = bucket.assessment_id
