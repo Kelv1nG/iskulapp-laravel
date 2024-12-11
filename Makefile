@@ -12,7 +12,7 @@ stop:
 	docker compose stop
 
 up:
-	docker compose up -d
+	docker compose up
 
 composer-install:
 	docker exec -u root school-erp-backend bash -c "composer install"

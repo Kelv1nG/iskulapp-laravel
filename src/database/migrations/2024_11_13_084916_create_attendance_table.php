@@ -1,7 +1,8 @@
 <?php
 
+use App\Models\AcademicYear;
 use App\Models\Student;
-use App\Models\AcademicYear; // Import the AcademicYear model
+use App\Models\Teacher;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,11 +16,11 @@ return new class extends Migration
     {
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Student::class);
-            $table->foreignIdFor(AcademicYear::class);
+            $table->foreignIdFor(Student::class, 'student_id');
+            $table->foreignIdFor(Teacher::class, 'checked_by');
+            $table->foreignIdFor(AcademicYear::class, 'academic_year_id');
             $table->date('attendance_date');
             $table->time('time_in')->nullable();
-            $table->time('time_out')->nullable();
             $table->timestamps();
         });
     }
