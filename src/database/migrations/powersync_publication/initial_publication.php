@@ -23,6 +23,7 @@ return new class extends Migration
                     assessment_question_answers,
                     assessment_student_reports,
                     assessment_student_answers,
+                    attendances,
                     academic_years,
                     grade_levels,
                     sections,
