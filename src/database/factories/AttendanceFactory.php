@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\AcademicYear;
+use App\Models\Section;
 use App\Models\Student;
 use App\Models\Teacher;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -22,7 +22,7 @@ class AttendanceFactory extends Factory
         return [
             'student_id' => Student::factory(),
             'checked_by' => Teacher::factory(),
-            'academic_year_id' => AcademicYear::factory(),
+            'section_id' => Section::factory(),
             'attendance_date' => $this->faker->date(),
             'time_in' => $this->faker->optional()->time(),
             'is_absent' => $this->faker->boolean,
