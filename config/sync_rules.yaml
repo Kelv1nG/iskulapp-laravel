@@ -95,6 +95,10 @@ bucket_definitions:
         FROM sections
         WHERE id = bucket.section_id
 
+      - SELECT *
+        FROM attendances
+        WHERE section_id = bucket.section_id
+
 
   # STUDENT 
   student_by_id:
@@ -127,6 +131,9 @@ bucket_definitions:
         FROM assessment_student_answers
         WHERE student_id = bucket.student_id
 
+      - SELECT *
+        FROM attendances
+        WHERE student_id = bucket.student_id
 
   student_by_subject_year:
     parameters:
@@ -161,6 +168,7 @@ bucket_definitions:
 
       - SELECT * 
         FROM assessment_questions
+
         WHERE assessment_id = bucket.assessment_id
 
       - SELECT * 
