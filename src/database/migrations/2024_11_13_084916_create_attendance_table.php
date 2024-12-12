@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\AcademicYear;
+use App\Models\Section;
 use App\Models\Student;
 use App\Models\Teacher;
 use Illuminate\Database\Migrations\Migration;
@@ -18,7 +18,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignIdFor(Student::class, 'student_id');
             $table->foreignIdFor(Teacher::class, 'checked_by')->nullable();
-            $table->foreignIdFor(AcademicYear::class, 'academic_year_id');
+            $table->foreignIdFor(Section::class, 'section_id');
             $table->date('attendance_date');
             $table->time('time_in')->nullable();
             $table->boolean('is_absent');
