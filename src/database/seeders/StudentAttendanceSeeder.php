@@ -53,23 +53,24 @@ class StudentAttendanceSeeder extends Seeder
                 attendance_date,
                 is_absent,
                 CASE
-                    WHEN is_weekend THEN NULL
                     WHEN is_absent THEN NULL
                     WHEN random() < 0.2 THEN '07:15:00'::time
                     ELSE '07:00:00'::time
                 END AS time_in
             FROM init_student_ts
+            WHERE is_weekend = FALSE
         )
 
         INSERT INTO attendances(
             id,
+            checked_by,
             student_id,
             section_id,
             attendance_date,
             is_absent,
             time_in
         )
-        SELECT gen_random_uuid(), * FROM insert_data
+        SELECT gen_random_uuid(), 1, * FROM insert_data
     SQL);
     }
 }

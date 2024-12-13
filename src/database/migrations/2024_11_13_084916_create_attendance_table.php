@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create('attendances', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignIdFor(Student::class, 'student_id');
-            $table->foreignIdFor(Teacher::class, 'checked_by')->nullable();
+            $table->foreignIdFor(Teacher::class, 'checked_by');
             $table->foreignIdFor(Section::class, 'section_id');
             $table->date('attendance_date');
             $table->time('time_in')->nullable();
