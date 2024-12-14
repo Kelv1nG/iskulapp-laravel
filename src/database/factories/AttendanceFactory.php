@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\AttendanceStatus;
 use App\Models\Section;
 use App\Models\Student;
 use App\Models\Teacher;
@@ -25,7 +26,7 @@ class AttendanceFactory extends Factory
             'section_id' => Section::factory(),
             'attendance_date' => $this->faker->date(),
             'time_in' => $this->faker->optional()->time(),
-            'is_absent' => $this->faker->boolean,
+            'status' => $this->faker->randomElement(AttendanceStatus::cases())->value,
             'created_at' => now(),
             'updated_at' => now(),
         ];

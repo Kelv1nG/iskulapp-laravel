@@ -40,9 +40,11 @@ class StudentAttendanceSeeder extends Seeder
                 section_id,
                 generated_day AS attendance_date,
                 EXTRACT(DOW FROM generated_day) IN (0, 6) AS is_weekend,
-                CASE WHEN EXTRACT(DOW FROM generated_day) IN (0, 6) THEN FALSE
-                    ELSE random() < 0.1
-                END AS is_absent
+                CASE
+                    WHEN random() < 0.1 THEN 'absent'
+                    WHEN random() < 0.2 THEN 'late'
+                    ELSE 'present'
+                END AS status
             FROM max_acad_year_students,
             LATERAL generate_series(start_date, end_date, interval '1 day') AS generated_day
         ),
@@ -51,10 +53,10 @@ class StudentAttendanceSeeder extends Seeder
                 student_id,
                 section_id,
                 attendance_date,
-                is_absent,
+                status,
                 CASE
-                    WHEN is_absent THEN NULL
-                    WHEN random() < 0.2 THEN '07:15:00'::time
+                    WHEN status = 'absent' THEN NULL
+                    WHEN status = 'late' THEN '07:15:00'::time
                     ELSE '07:00:00'::time
                 END AS time_in
             FROM init_student_ts
@@ -67,7 +69,7 @@ class StudentAttendanceSeeder extends Seeder
             student_id,
             section_id,
             attendance_date,
-            is_absent,
+            status,
             time_in
         )
         SELECT gen_random_uuid(), 1, * FROM insert_data
