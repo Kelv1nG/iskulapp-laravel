@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\AttendanceStatus;
 use App\Models\Section;
 use App\Models\Student;
 use App\Models\Teacher;
@@ -21,7 +22,7 @@ return new class extends Migration
             $table->foreignIdFor(Section::class, 'section_id');
             $table->date('attendance_date');
             $table->time('time_in')->nullable();
-            $table->boolean('is_absent');
+            $table->enum('status', array_column(AttendanceStatus::cases(), 'value'));
             $table->timestamps();
         });
     }
