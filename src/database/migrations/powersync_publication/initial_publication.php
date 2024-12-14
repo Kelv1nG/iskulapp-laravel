@@ -27,16 +27,17 @@ return new class extends Migration
                     academic_years,
                     grade_levels,
                     sections,
+                    students,
+                    student_year,
+                    student_subjects,
+                    student_sections,
                     subjects,
                     subject_classes,
                     subject_years,
                     teachers,
                     teacher_year,
                     teacher_subjects,
-                    students,
-                    student_year,
-                    student_subjects,
-                    student_sections;
+                    user_profiles;
             END $$;
         ');
     }

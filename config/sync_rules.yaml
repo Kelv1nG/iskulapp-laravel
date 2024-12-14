@@ -3,6 +3,10 @@
 # Note that changes to this file are not watched.
 # The service needs to be restarted for changes to take effect.
 bucket_definitions:
+  global:
+    data:
+      - SELECT * FROM user_profiles
+
   school:
     parameters:
       - SELECT request.jwt() ->> 'current_school_id' AS current_school_id
