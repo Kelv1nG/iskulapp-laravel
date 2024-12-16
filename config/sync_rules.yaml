@@ -3,9 +3,14 @@
 # Note that changes to this file are not watched.
 # The service needs to be restarted for changes to take effect.
 bucket_definitions:
+
+  #TODO: this is temporary, dont really want to denormalize this
+  # additionally if user is teacher cant afford to sync by student id since this would greatly increase bucket count
+  # potentially check usage of client parameter
   global:
     data:
       - SELECT * FROM user_profiles
+      - SELECT * FROM students
 
   school:
     parameters:
@@ -103,6 +108,10 @@ bucket_definitions:
         FROM attendances
         WHERE section_id = bucket.section_id
 
+      - SELECT *
+        FROM student_sections
+        WHERE section_id = bucket.section_id
+
 
   # STUDENT 
   student_by_id:
@@ -111,10 +120,10 @@ bucket_definitions:
       - SELECT request.jwt() ->> 'student_id' AS student_id
 
     data:
-      - SELECT *
-        FROM students
-        WHERE id = bucket.student_id
-
+      # - SELECT *
+      #   FROM students
+      #   WHERE id = bucket.student_id
+      #
       - SELECT *
         FROM student_year
         WHERE student_id = bucket.student_id
