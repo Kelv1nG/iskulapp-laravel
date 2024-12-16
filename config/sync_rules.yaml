@@ -181,7 +181,6 @@ bucket_definitions:
 
       - SELECT * 
         FROM assessment_questions
-
         WHERE assessment_id = bucket.assessment_id
 
       - SELECT * 
