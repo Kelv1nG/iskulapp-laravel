@@ -38,6 +38,8 @@ class DatabaseSeeder extends Seeder
                 AssessmentStudentReportSeeder::class,
                 AssessmentStudentAnswerSeeder::class,
 
+                StudentAttendanceSeeder::class,
+
                 OauthClientSeeder::class,
             ]);
         }

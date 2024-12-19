@@ -23,19 +23,21 @@ return new class extends Migration
                     assessment_question_answers,
                     assessment_student_reports,
                     assessment_student_answers,
+                    attendances,
                     academic_years,
                     grade_levels,
                     sections,
+                    students,
+                    student_year,
+                    student_subjects,
+                    student_sections,
                     subjects,
                     subject_classes,
                     subject_years,
                     teachers,
                     teacher_year,
                     teacher_subjects,
-                    students,
-                    student_year,
-                    student_subjects,
-                    student_sections;
+                    user_profiles;
             END $$;
         ');
     }

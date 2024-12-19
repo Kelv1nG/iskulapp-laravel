@@ -63,9 +63,11 @@ services:
       # PS_PG_CLIENT_PRIVATE_KEY:
 
       # Potential JWKs public key template
-      # PS_JWK_N:
-      # PS_JWK_E:
-      # PS_JWK_KID:
+      PS_KTY: ${PS_KTY}
+      PS_N: ${PS_N}
+      PS_E: ${PS_E}
+      PS_ALG: ${PS_ALG}
+      PS_KID: ${PS_KID}
 
     ports:
       - ${PS_PORT}:${PS_PORT}

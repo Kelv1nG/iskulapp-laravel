@@ -1,6 +1,7 @@
 <?php
 
-use App\Models\AcademicYear;
+use App\Enums\AttendanceStatus;
+use App\Models\Section;
 use App\Models\Student;
 use App\Models\Teacher;
 use Illuminate\Database\Migrations\Migration;
@@ -15,12 +16,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('attendances', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->foreignIdFor(Student::class, 'student_id');
             $table->foreignIdFor(Teacher::class, 'checked_by');
-            $table->foreignIdFor(AcademicYear::class, 'academic_year_id');
+            $table->foreignIdFor(Section::class, 'section_id');
             $table->date('attendance_date');
             $table->time('time_in')->nullable();
+            $table->enum('status', array_column(AttendanceStatus::cases(), 'value'));
             $table->timestamps();
         });
     }

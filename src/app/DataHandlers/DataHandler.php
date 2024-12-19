@@ -5,6 +5,7 @@ namespace App\DataHandlers;
 use App\DataHandlers\Exceptions\NoTableException;
 use App\Models\Assessment;
 use App\Models\AssessmentTaker;
+use App\Models\Attendance;
 
 class DataHandler
 {
@@ -20,6 +21,7 @@ class DataHandler
         $handlers = [
             Assessment::getTableName() => AssessmentHandler::class,
             AssessmentTaker::getTableName() => AssessmentTakerHandler::class,
+            Attendance::getTableName() => AttendanceHandler::class,
         ];
 
         if (! isset($handlers[$table])) {
