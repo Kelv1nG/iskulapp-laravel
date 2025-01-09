@@ -31,41 +31,51 @@
       </button>
 
       <!-- Links -->
-      <div id="menu" class="hidden md:flex space-x-6 mr-10">
+      <ul class="hidden md:flex space-x-6 mr-10">
+        <li >
+          <a
+        href="#features"
+        class=" font-semibold nav-link"
+        data-section="features"
+        >Features</a
+      >
+        </li>
+       <li>
         <a
         href="#about"
-        class="text-blue-700 hover:text-blue-800 font-semibold"
+        class=" font-semibold nav-link"
+        data-section="about"
         >About Us</a
       >
+       </li>
+       <li>
         <a
-          href="#features"
-          class="text-blue-700 hover:text-blue-800 font-semibold"
-          >Features</a
-        >
-        <a
-          href="#faqs"
-          class="text-blue-700 hover:text-blue-800 font-semibold"
-          >Faqs</a
-        >
-      </div>
+        href="#faqs"
+        class=" font-semibold nav-link"
+        data-section="faqs"
+        >Faqs</a
+      >
+       </li>
+      </ul>
     </div>
 
     <!-- Mobile Menu -->
     <div id="mobile-menu" class="md:hidden hidden">
+      <a
+      href="#features"
+      class="block mt-5 py-5 rounded-sm px-2 text-blue-700 hover:bg-blue-100 font-semibold"
+      >Features</a
+    >
       <a
       href="#about"
       class="block mt-5 py-5 rounded-sm px-2 text-blue-700 hover:bg-blue-100 font-semibold"
       >About Us</a
     >
       <a
-        href="#features"
-        class="block mt-5 py-5 rounded-sm px-2 text-blue-700 hover:bg-blue-100 font-semibold"
-        >Features</a
-      >
-      <a
         href="#faqs"
         class="block py-5 px-2 rounded-sm text-blue-700 hover:bg-blue-100 font-semibold"
         >Faqs</a
       >
     </div>
+  
   </nav>
